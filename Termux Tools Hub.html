@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)file:///C:/Users/USER/Downloads/termux-tools.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termux Tools Hub</title>
+<link href="./Termux Tools Hub_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0a;
+    --bg2: #0d150d;
+    --panel: #111a11;
+    --border: #1a3a1a;
+    --green: #00ff41;
+    --green2: #00cc33;
+    --green3: #004d14;
+    --cyan: #00ffcc;
+    --yellow: #ffe600;
+    --red: #ff3c3c;
+    --orange: #ff8800;
+    --text: #c8ffc8;
+    --muted: #4a7a4a;
+    --white: #e8ffe8;
+    --accent: #00ff41;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', 'Noto Sans Bengali', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline effect */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Matrix rain background */
+  #matrix-bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.06;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0a180a 0%, var(--bg) 100%);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: var(--green3);
+    border: 2px solid var(--green);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    color: var(--green);
+    box-shadow: 0 0 16px rgba(0,255,65,0.4);
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 16px rgba(0,255,65,0.4); }
+    50% { box-shadow: 0 0 32px rgba(0,255,65,0.8), 0 0 8px rgba(0,255,65,0.6); }
+  }
+
+  .logo-text h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(0,255,65,0.5);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .logo-text p {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px;
+  }
+
+  .lang-btn {
+    padding: 8px 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--muted);
+  }
+
+  .lang-btn.active {
+    background: var(--green3);
+    border-color: var(--green);
+    color: var(--green);
+    box-shadow: 0 0 12px rgba(0,255,65,0.3);
+  }
+
+  .lang-btn:hover:not(.active) {
+    color: var(--text);
+    border-color: var(--muted);
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--green3);
+    border-top: 1px solid var(--green);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 0;
+    overflow: hidden;
+  }
+
+  .ticker-inner {
+    display: flex;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    gap: 60px;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* HERO */
+  .hero {
+    padding: 60px 24px 40px;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    box-shadow: 0 0 10px rgba(0,255,204,0.2);
+  }
+
+  .hero h2 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    text-shadow: 0 0 30px rgba(0,255,65,0.2);
+  }
+
+  .hero h2 span { color: var(--green); text-shadow: 0 0 20px rgba(0,255,65,0.6); }
+
+  .hero p {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+    font-family: 'Noto Sans Bengali', sans-serif;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 28px;
+    color: var(--green);
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(0,255,65,0.5);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* SEARCH */
+  .search-wrap {
+    padding: 0 24px 40px;
+  }
+
+  .search-box {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .search-prefix {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--green);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 16px 16px 44px;
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 20px rgba(0,255,65,0.15);
+  }
+
+  .search-input::placeholder { color: var(--muted); }
+
+  /* CATEGORY TABS */
+  .category-nav {
+    padding: 0 24px 30px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .category-nav::-webkit-scrollbar { display: none; }
+
+  .cat-tabs {
+    display: flex;
+    gap: 10px;
+    min-width: max-content;
+    justify-content: center;
+  }
+
+  .cat-tab {
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel);
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cat-tab:hover { color: var(--text); border-color: var(--muted); }
+
+  .cat-tab.active {
+    background: var(--green3);
+    border-color: var(--green);
+    color: var(--green);
+    box-shadow: 0 0 12px rgba(0,255,65,0.2);
+  }
+
+  /* TOOLS GRID */
+  .tools-section { padding: 0 24px 60px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .section-header .count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    background: var(--green3);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 2px 10px;
+    border-radius: 20px;
+  }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  .tool-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.25s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .tool-card:hover {
+    border-color: var(--green);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,255,65,0.15);
+  }
+
+  .tool-card:hover::before { opacity: 1; }
+
+  .card-header {
+    padding: 18px 20px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .tool-icon {
+    width: 42px; height: 42px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .card-meta { flex: 1; min-width: 0; }
+
+  .tool-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 3px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .tool-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    font-family: 'Noto Sans Bengali', 'Rajdhani', sans-serif;
+  }
+
+  .tool-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+    white-space: nowrap;
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+
+  .badge-net { color: var(--cyan); border-color: var(--cyan); background: rgba(0,255,204,0.07); }
+  .badge-hack { color: var(--red); border-color: var(--red); background: rgba(255,60,60,0.07); }
+  .badge-sys { color: var(--yellow); border-color: var(--yellow); background: rgba(255,230,0,0.07); }
+  .badge-pkg { color: var(--orange); border-color: var(--orange); background: rgba(255,136,0,0.07); }
+  .badge-file { color: #cc88ff; border-color: #cc88ff; background: rgba(204,136,255,0.07); }
+  .badge-info { color: var(--green); border-color: var(--green); background: rgba(0,255,65,0.07); }
+
+  .commands-block {
+    padding: 0 20px 20px;
+  }
+
+  .cmd-group {
+    margin-bottom: 14px;
+  }
+
+  .cmd-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .cmd-item {
+    background: #080f08;
+    border: 1px solid #1a2a1a;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+
+  .cmd-item:hover { border-color: var(--green3); }
+
+  .cmd-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    word-break: break-all;
+    flex: 1;
+  }
+
+  .cmd-text .cmd-bin { color: var(--cyan); }
+  .cmd-text .cmd-flag { color: var(--yellow); }
+  .cmd-text .cmd-arg { color: var(--orange); }
+  .cmd-text .cmd-str { color: #cc88ff; }
+
+  .cmd-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'Noto Sans Bengali', 'Rajdhani', sans-serif;
+    line-height: 1.4;
+    padding: 0 14px 8px;
+  }
+
+  .copy-btn {
+    background: var(--green3);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .copy-btn:hover { background: var(--green); color: #000; }
+  .copy-btn.copied { background: var(--green); color: #000; }
+
+  /* INSTALL GUIDE */
+  .install-section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 0 24px 60px;
+  }
+
+  .install-section h3 {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--green);
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .install-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .install-card {
+    background: #080f08;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .install-card h4 {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+
+  .install-cmd {
+    background: #030703;
+    border: 1px solid #1a2a1a;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--green);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 30px 24px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  footer span { color: var(--green); }
+
+  /* HIDDEN / VISIBLE */
+  .lang-en .bn { display: none !important; }
+  .lang-bn .en { display: none !important; }
+  .tool-card.hidden { display: none; }
+
+  .no-results {
+    text-align: center;
+    padding: 60px;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--muted);
+    font-size: 14px;
+    display: none;
+  }
+
+  .no-results.show { display: block; }
+
+  /* TOOLTIP */
+  .tip {
+    position: relative;
+  }
+
+  /* NOTIFICATION */
+  .notif {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--green3);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    box-shadow: 0 0 20px rgba(0,255,65,0.3);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  .notif.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    .tools-grid { grid-template-columns: 1fr; }
+    .install-grid { grid-template-columns: 1fr; }
+    .hero { padding: 40px 16px 30px; }
+    .header-inner { gap: 10px; }
+    .logo-text h1 { font-size: 16px; }
+  }
+</style>
+</head>
+<body class="lang-en">
+
+<canvas id="matrix-bg" width="1440" height="739"></canvas>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">$_</div>
+      <div class="logo-text">
+        <h1>Termux Hub</h1>
+        <p class="en">ANDROID HACKING TOOLKIT</p>
+        <p class="bn">এন্ড্রয়েড হ্যাকিং টুলকিট</p>
+      </div>
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang(&#39;en&#39;)" id="btn-en">EN</button>
+      <button class="lang-btn" onclick="setLang(&#39;bn&#39;)" id="btn-bn">বাং</button>
+    </div>
+  </div>
+</header>
+
+<div class="ticker">
+  <div class="ticker-inner" id="ticker">
+    <span>⚡ Nmap — Port Scanner</span>
+    <span>🔐 Hydra — Brute Force</span>
+    <span>🌐 SQLmap — SQL Injection</span>
+    <span>🛡️ Metasploit — Exploitation</span>
+    <span>📡 Aircrack-ng — WiFi Attack</span>
+    <span>🔍 Nikto — Web Scanner</span>
+    <span>🧨 WPScan — WordPress Scan</span>
+    <span>🐍 Python3 — Scripting</span>
+    <span>📦 Git — Version Control</span>
+    <span>🔧 pkg — Package Manager</span>
+    <span>⚡ Nmap — Port Scanner</span>
+    <span>🔐 Hydra — Brute Force</span>
+    <span>🌐 SQLmap — SQL Injection</span>
+    <span>🛡️ Metasploit — Exploitation</span>
+    <span>📡 Aircrack-ng — WiFi Attack</span>
+    <span>🔍 Nikto — Web Scanner</span>
+    <span>🧨 WPScan — WordPress Scan</span>
+    <span>🐍 Python3 — Scripting</span>
+    <span>📦 Git — Version Control</span>
+    <span>🔧 pkg — Package Manager</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="hero">
+    <div class="hero-tag en">// TERMUX COMMAND REFERENCE v2.0</div>
+    <div class="hero-tag bn">// টার্মাক্স কমান্ড রেফারেন্স v2.0</div>
+    <h2>
+      <span class="en">All Termux <span>Tools</span><br>in One Place</span>
+      <span class="bn">সব টার্মাক্স <span>টুলস</span><br>এক জায়গায়</span>
+    </h2>
+    <p class="en">Complete command reference for ethical hacking, networking, system tools, file management, and more — right in your Android terminal.</p>
+    <p class="bn">ইথিক্যাল হ্যাকিং, নেটওয়ার্কিং, সিস্টেম টুলস, ফাইল ম্যানেজমেন্ট এবং আরও অনেক কিছুর সম্পূর্ণ কমান্ড রেফারেন্স — আপনার Android টার্মিনালে।</p>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">50+</div><div class="stat-label en">COMMANDS</div><div class="stat-label bn">কমান্ড</div></div>
+      <div class="stat"><div class="stat-num">10+</div><div class="stat-label en">CATEGORIES</div><div class="stat-label bn">ক্যাটাগরি</div></div>
+      <div class="stat"><div class="stat-num">2</div><div class="stat-label en">LANGUAGES</div><div class="stat-label bn">ভাষা</div></div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <span class="search-prefix">$&gt;</span>
+      <input class="search-input" type="text" id="search-input" placeholder="Search tools &amp; commands..." oninput="filterTools()">
+    </div>
+  </div>
+
+  <div class="category-nav">
+    <div class="cat-tabs">
+      <div class="cat-tab active" onclick="filterCat(&#39;all&#39;, this)">🔥 <span class="en">All</span><span class="bn">সব</span></div>
+      <div class="cat-tab" onclick="filterCat(&#39;network&#39;, this)">📡 <span class="en">Network</span><span class="bn">নেটওয়ার্ক</span></div>
+      <div class="cat-tab" onclick="filterCat(&#39;hack&#39;, this)">🔐 <span class="en">Security</span><span class="bn">সিকিউরিটি</span></div>
+      <div class="cat-tab" onclick="filterCat(&#39;sys&#39;, this)">⚙️ <span class="en">System</span><span class="bn">সিস্টেম</span></div>
+      <div class="cat-tab" onclick="filterCat(&#39;pkg&#39;, this)">📦 <span class="en">Packages</span><span class="bn">প্যাকেজ</span></div>
+      <div class="cat-tab" onclick="filterCat(&#39;file&#39;, this)">📁 <span class="en">File</span><span class="bn">ফাইল</span></div>
+      <div class="cat-tab" onclick="filterCat(&#39;web&#39;, this)">🌐 <span class="en">Web</span><span class="bn">ওয়েব</span></div>
+      <div class="cat-tab" onclick="filterCat(&#39;script&#39;, this)">🐍 <span class="en">Scripting</span><span class="bn">স্ক্রিপ্টিং</span></div>
+    </div>
+  </div>
+
+  <div class="tools-section">
+    <div class="section-header">
+      <h3 class="en">// Tool Reference</h3>
+      <h3 class="bn">// টুল রেফারেন্স</h3>
+      <span class="count" id="count-label">12 tools</span>
+    </div>
+
+    <div class="tools-grid" id="tools-grid">
+
+      <!-- NMAP -->
+      <div class="tool-card" data-cat="network" data-name="nmap network scanner port">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#001a2a;border:1px solid #00ffcc;">📡</div>
+          <div class="card-meta">
+            <div class="tool-name">Nmap</div>
+            <div class="tool-desc en">Network discovery &amp; port scanning tool</div>
+            <div class="tool-desc bn">নেটওয়ার্ক স্ক্যান ও পোর্ট খোঁজার টুল</div>
+          </div>
+          <span class="tool-badge badge-net">NETWORK</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div>
+          <div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">nmap</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install nmap&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div>
+          <div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">nmap</span> <span class="cmd-arg">192.168.1.1</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;nmap 192.168.1.1&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Basic scan — checks open ports of a host</div>
+          <div class="cmd-desc bn">বেসিক স্ক্যান — হোস্টের খোলা পোর্ট দেখায়</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">nmap</span> <span class="cmd-flag">-sV</span> <span class="cmd-flag">-O</span> <span class="cmd-arg">192.168.1.0/24</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;nmap -sV -O 192.168.1.0/24&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Detect services &amp; OS version on entire subnet</div>
+          <div class="cmd-desc bn">পুরো সাবনেটে সার্ভিস ও OS ভার্শন ডিটেক্ট করে</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">nmap</span> <span class="cmd-flag">-A</span> <span class="cmd-flag">-T4</span> <span class="cmd-arg">target.com</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;nmap -A -T4 target.com&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Aggressive scan with OS detection, scripts &amp; traceroute</div>
+          <div class="cmd-desc bn">অ্যাগ্রেসিভ স্ক্যান — OS, স্ক্রিপ্ট ও ট্রেসরুট সহ</div>
+        </div>
+      </div>
+
+      <!-- HYDRA -->
+      <div class="tool-card" data-cat="hack" data-name="hydra brute force password crack">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#1a0000;border:1px solid #ff3c3c;">🔐</div>
+          <div class="card-meta">
+            <div class="tool-name">Hydra</div>
+            <div class="tool-desc en">Fast network login brute-force tool</div>
+            <div class="tool-desc bn">নেটওয়ার্ক লগিন ব্রুটফোর্স টুল</div>
+          </div>
+          <span class="tool-badge badge-hack">SECURITY</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div><div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">hydra</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install hydra&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div><div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">hydra</span> <span class="cmd-flag">-l</span> admin <span class="cmd-flag">-P</span> pass.txt ssh://192.168.1.1</span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;hydra -l admin -P pass.txt ssh://192.168.1.1&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">SSH brute-force with username 'admin' and wordlist</div>
+          <div class="cmd-desc bn">SSH ব্রুটফোর্স — username 'admin' ও পাসওয়ার্ড লিস্ট দিয়ে</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">hydra</span> <span class="cmd-flag">-L</span> users.txt <span class="cmd-flag">-P</span> pass.txt ftp://target</span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;hydra -L users.txt -P pass.txt ftp://target&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">FTP brute-force with user and password lists</div>
+          <div class="cmd-desc bn">FTP ব্রুটফোর্স — ইউজার ও পাসওয়ার্ড লিস্ট দিয়ে</div>
+        </div>
+      </div>
+
+      <!-- SQLMAP -->
+      <div class="tool-card" data-cat="hack web" data-name="sqlmap sql injection database">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#1a1000;border:1px solid #ff8800;">🌐</div>
+          <div class="card-meta">
+            <div class="tool-name">SQLmap</div>
+            <div class="tool-desc en">Automatic SQL injection detection &amp; exploitation</div>
+            <div class="tool-desc bn">SQL ইনজেকশন অটোমেটিক ডিটেক্ট ও এক্সপ্লয়েট করার টুল</div>
+          </div>
+          <span class="tool-badge badge-hack">SECURITY</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div><div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">sqlmap</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install sqlmap&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div><div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">sqlmap</span> <span class="cmd-flag">-u</span> <span class="cmd-str">"http://site.com/page?id=1"</span> <span class="cmd-flag">--dbs</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;sqlmap -u \" http:="" site.com="" page?id="1\&quot;" --dbs')"="">COPY</button>
+          </div>
+          <div class="cmd-desc en">Test URL for SQL injection and list databases</div>
+          <div class="cmd-desc bn">URL-এ SQL injection টেস্ট করে ডেটাবেস লিস্ট দেখায়</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">sqlmap</span> <span class="cmd-flag">-u</span> <span class="cmd-str">"url"</span> <span class="cmd-flag">-D</span> dbname <span class="cmd-flag">--tables</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;sqlmap -u " url"="" -d="" dbname="" --tables')"="">COPY</button>
+          </div>
+          <div class="cmd-desc en">List tables inside a specific database</div>
+          <div class="cmd-desc bn">নির্দিষ্ট ডেটাবেসের টেবিল লিস্ট দেখায়</div>
+        </div>
+      </div>
+
+      <!-- PKG MANAGER -->
+      <div class="tool-card" data-cat="pkg" data-name="pkg install update package manager">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#1a0d00;border:1px solid #ff8800;">📦</div>
+          <div class="card-meta">
+            <div class="tool-name">pkg / apt</div>
+            <div class="tool-desc en">Termux package manager — install, update, remove tools</div>
+            <div class="tool-desc bn">Termux প্যাকেজ ম্যানেজার — টুলস ইন্সটল, আপডেট, রিমুভ করুন</div>
+          </div>
+          <span class="tool-badge badge-pkg">PACKAGE</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> update <span class="cmd-flag">&amp;&amp;</span> <span class="cmd-bin">pkg</span> upgrade</span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg update &amp;&amp; pkg upgrade&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Update all packages to latest version</div>
+          <div class="cmd-desc bn">সব প্যাকেজ লেটেস্ট ভার্শনে আপডেট করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">tool-name</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install tool-name&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Install any package/tool</div>
+          <div class="cmd-desc bn">যেকোনো প্যাকেজ/টুল ইন্সটল করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> remove <span class="cmd-arg">tool-name</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg remove tool-name&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Uninstall a package</div>
+          <div class="cmd-desc bn">প্যাকেজ আনইন্সটল করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> search <span class="cmd-arg">keyword</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg search keyword&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Search for available packages</div>
+          <div class="cmd-desc bn">উপলব্ধ প্যাকেজ খুঁজুন</div>
+        </div>
+      </div>
+
+      <!-- FILE MANAGEMENT -->
+      <div class="tool-card" data-cat="file" data-name="file ls mkdir cd cp mv rm directory">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#120014;border:1px solid #cc88ff;">📁</div>
+          <div class="card-meta">
+            <div class="tool-name">File Commands</div>
+            <div class="tool-desc en">Navigate, create, copy, move and manage files</div>
+            <div class="tool-desc bn">ফাইল নেভিগেট, তৈরি, কপি, মুভ ও ম্যানেজ করুন</div>
+          </div>
+          <span class="tool-badge badge-file">FILE</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">ls</span> <span class="cmd-flag">-la</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;ls -la&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">List all files (including hidden) with details</div>
+          <div class="cmd-desc bn">সব ফাইল (লুকানো সহ) বিস্তারিত দেখান</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">mkdir</span> <span class="cmd-arg">folder_name</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;mkdir folder_name&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Create a new directory/folder</div>
+          <div class="cmd-desc bn">নতুন ডিরেক্টরি/ফোল্ডার তৈরি করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">cp</span> <span class="cmd-arg">source</span> <span class="cmd-arg">dest</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;cp source dest&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Copy a file from source to destination</div>
+          <div class="cmd-desc bn">ফাইল কপি করুন সোর্স থেকে গন্তব্যে</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">rm</span> <span class="cmd-flag">-rf</span> <span class="cmd-arg">folder/</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;rm -rf folder/&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">⚠️ Force delete a folder and all its contents</div>
+          <div class="cmd-desc bn">⚠️ ফোল্ডার ও সব কন্টেন্ট জোর করে ডিলিট করুন</div>
+        </div>
+      </div>
+
+      <!-- SYSTEM INFO -->
+      <div class="tool-card" data-cat="sys" data-name="system info cpu memory process top">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#1a1a00;border:1px solid #ffe600;">⚙️</div>
+          <div class="card-meta">
+            <div class="tool-name">System Info</div>
+            <div class="tool-desc en">Monitor CPU, memory, processes and system status</div>
+            <div class="tool-desc bn">CPU, মেমরি, প্রসেস ও সিস্টেম স্ট্যাটাস মনিটর করুন</div>
+          </div>
+          <span class="tool-badge badge-sys">SYSTEM</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">top</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;top&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Show running processes with CPU &amp; memory usage</div>
+          <div class="cmd-desc bn">চলমান প্রসেস ও CPU/মেমরি ব্যবহার দেখুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">df</span> <span class="cmd-flag">-h</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;df -h&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Show disk space in human-readable format</div>
+          <div class="cmd-desc bn">ডিস্ক স্পেস সহজ ফরম্যাটে দেখুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">uname</span> <span class="cmd-flag">-a</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;uname -a&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Show kernel &amp; system architecture info</div>
+          <div class="cmd-desc bn">কার্নেল ও সিস্টেম আর্কিটেকচার তথ্য দেখুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">ps</span> aux</span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;ps aux&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">List all active processes</div>
+          <div class="cmd-desc bn">সব চলমান প্রসেসের তালিকা দেখুন</div>
+        </div>
+      </div>
+
+      <!-- CURL / WGET -->
+      <div class="tool-card" data-cat="network web" data-name="curl wget download web http request">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#001a1a;border:1px solid #00ffcc;">🌐</div>
+          <div class="card-meta">
+            <div class="tool-name">curl / wget</div>
+            <div class="tool-desc en">Download files and make HTTP requests from terminal</div>
+            <div class="tool-desc bn">টার্মিনাল থেকে ফাইল ডাউনলোড ও HTTP রিকোয়েস্ট করুন</div>
+          </div>
+          <span class="tool-badge badge-net">NETWORK</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">curl</span> <span class="cmd-arg">https://example.com</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;curl https://example.com&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Fetch and print a webpage's HTML</div>
+          <div class="cmd-desc bn">ওয়েবপেজের HTML প্রিন্ট করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">wget</span> <span class="cmd-arg">https://file.com/file.zip</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;wget https://file.com/file.zip&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Download a file from internet</div>
+          <div class="cmd-desc bn">ইন্টারনেট থেকে ফাইল ডাউনলোড করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">curl</span> <span class="cmd-flag">-X POST</span> <span class="cmd-flag">-d</span> <span class="cmd-str">'data'</span> <span class="cmd-arg">url</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, " curl="" -x="" post="" -d="" 'data'="" url")"="">COPY</button>
+          </div>
+          <div class="cmd-desc en">Send POST request with data to a URL</div>
+          <div class="cmd-desc bn">URL-এ POST রিকোয়েস্ট ডেটা সহ পাঠান</div>
+        </div>
+      </div>
+
+      <!-- NIKTO -->
+      <div class="tool-card" data-cat="hack web" data-name="nikto web scanner vulnerability">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#1a0000;border:1px solid #ff3c3c;">🔍</div>
+          <div class="card-meta">
+            <div class="tool-name">Nikto</div>
+            <div class="tool-desc en">Web server vulnerability &amp; misconfiguration scanner</div>
+            <div class="tool-desc bn">ওয়েব সার্ভার ভালনারেবিলিটি স্ক্যানার</div>
+          </div>
+          <span class="tool-badge badge-hack">SECURITY</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div><div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">nikto</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install nikto&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div><div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">nikto</span> <span class="cmd-flag">-h</span> <span class="cmd-arg">http://target.com</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;nikto -h http://target.com&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Scan a web server for vulnerabilities</div>
+          <div class="cmd-desc bn">ওয়েব সার্ভার ভালনারেবিলিটির জন্য স্ক্যান করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">nikto</span> <span class="cmd-flag">-h</span> <span class="cmd-arg">target</span> <span class="cmd-flag">-o</span> result.txt</span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;nikto -h target -o result.txt&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Scan and save results to a file</div>
+          <div class="cmd-desc bn">স্ক্যান করে ফাইলে রেজাল্ট সেভ করুন</div>
+        </div>
+      </div>
+
+      <!-- PYTHON -->
+      <div class="tool-card" data-cat="script" data-name="python3 script programming pip">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#00100a;border:1px solid #00ff41;">🐍</div>
+          <div class="card-meta">
+            <div class="tool-name">Python3</div>
+            <div class="tool-desc en">Run Python scripts, automation &amp; exploitation tools</div>
+            <div class="tool-desc bn">Python স্ক্রিপ্ট চালান, অটোমেশন ও এক্সপ্লয়েট টুলস</div>
+          </div>
+          <span class="tool-badge badge-info">SCRIPT</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div><div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">python</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install python&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div><div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">python3</span> <span class="cmd-arg">script.py</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;python3 script.py&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Run a Python script</div>
+          <div class="cmd-desc bn">Python স্ক্রিপ্ট চালান</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pip</span> install <span class="cmd-arg">requests</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pip install requests&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Install a Python library using pip</div>
+          <div class="cmd-desc bn">pip দিয়ে Python লাইব্রেরি ইন্সটল করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">python3</span> <span class="cmd-flag">-m</span> http.server <span class="cmd-arg">8080</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;python3 -m http.server 8080&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Start a quick HTTP server on port 8080</div>
+          <div class="cmd-desc bn">পোর্ট 8080-এ দ্রুত HTTP সার্ভার চালু করুন</div>
+        </div>
+      </div>
+
+      <!-- GIT -->
+      <div class="tool-card" data-cat="pkg script" data-name="git clone github repository version control">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#100010;border:1px solid #cc88ff;">📦</div>
+          <div class="card-meta">
+            <div class="tool-name">Git</div>
+            <div class="tool-desc en">Clone GitHub repos &amp; manage version control</div>
+            <div class="tool-desc bn">GitHub রিপো ক্লোন করুন ও ভার্শন কন্ট্রোল ম্যানেজ করুন</div>
+          </div>
+          <span class="tool-badge badge-file">GIT</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div><div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">git</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install git&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div><div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">git</span> clone <span class="cmd-arg">https://github.com/user/repo</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;git clone https://github.com/user/repo&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Clone a GitHub repository locally</div>
+          <div class="cmd-desc bn">GitHub রিপো লোকালি ক্লোন করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">git</span> pull</span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;git pull&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Pull latest updates from remote repo</div>
+          <div class="cmd-desc bn">রিমোট রিপো থেকে লেটেস্ট আপডেট নিন</div>
+        </div>
+      </div>
+
+      <!-- METASPLOIT -->
+      <div class="tool-card" data-cat="hack" data-name="metasploit msfconsole exploit penetration testing">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#1a0000;border:1px solid #ff3c3c;">🛡️</div>
+          <div class="card-meta">
+            <div class="tool-name">Metasploit</div>
+            <div class="tool-desc en">Penetration testing framework — find &amp; exploit vulnerabilities</div>
+            <div class="tool-desc bn">পেনিট্রেশন টেস্টিং ফ্রেমওয়ার্ক — ভালনারেবিলিটি খুঁজুন ও এক্সপ্লয়েট করুন</div>
+          </div>
+          <span class="tool-badge badge-hack">SECURITY</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div><div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">unstable-repo</span> &amp;&amp; <span class="cmd-bin">pkg</span> install <span class="cmd-arg">metasploit-framework</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install unstable-repo &amp;&amp; pkg install metasploit-framework&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div><div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">msfconsole</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;msfconsole&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Launch the Metasploit console</div>
+          <div class="cmd-desc bn">Metasploit কনসোল চালু করুন</div>
+          <div class="cmd-item">
+            <span class="cmd-text">msf&gt; <span class="cmd-bin">search</span> <span class="cmd-arg">eternalblue</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;search eternalblue&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Search for exploit modules inside MSF</div>
+          <div class="cmd-desc bn">MSF-এর মধ্যে এক্সপ্লয়েট মডিউল সার্চ করুন</div>
+        </div>
+      </div>
+
+      <!-- NETCAT -->
+      <div class="tool-card" data-cat="network hack" data-name="netcat nc listener reverse shell backdoor">
+        <div class="card-header">
+          <div class="tool-icon" style="background:#001a1a;border:1px solid #00ffcc;">📡</div>
+          <div class="card-meta">
+            <div class="tool-name">Netcat (nc)</div>
+            <div class="tool-desc en">TCP/UDP networking — listeners, shells &amp; port checks</div>
+            <div class="tool-desc bn">TCP/UDP নেটওয়ার্কিং — লিসেনার, শেল ও পোর্ট চেক</div>
+          </div>
+          <span class="tool-badge badge-net">NETWORK</span>
+        </div>
+        <div class="commands-block">
+          <div class="cmd-label en">INSTALL</div><div class="cmd-label bn">ইন্সটল</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">pkg</span> install <span class="cmd-arg">netcat-openbsd</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install netcat-openbsd&#39;)">COPY</button>
+          </div>
+          <div class="cmd-label en" style="margin-top:10px">COMMANDS</div><div class="cmd-label bn" style="margin-top:10px">কমান্ড</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">nc</span> <span class="cmd-flag">-lvnp</span> <span class="cmd-arg">4444</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;nc -lvnp 4444&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Start a listener on port 4444 (catch reverse shells)</div>
+          <div class="cmd-desc bn">পোর্ট 4444-এ লিসেনার চালু করুন (রিভার্স শেল ধরতে)</div>
+          <div class="cmd-item">
+            <span class="cmd-text"><span class="cmd-bin">nc</span> <span class="cmd-arg">192.168.1.1</span> <span class="cmd-arg">80</span></span>
+            <button class="copy-btn" onclick="copyCmd(this, &#39;nc 192.168.1.1 80&#39;)">COPY</button>
+          </div>
+          <div class="cmd-desc en">Connect to a host on port 80</div>
+          <div class="cmd-desc bn">হোস্টের পোর্ট 80-এ কানেক্ট করুন</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="no-results" id="no-results">
+      <p class="en">No tools found matching your search.</p>
+      <p class="bn">আপনার সার্চের সাথে কোনো টুল পাওয়া যায়নি।</p>
+    </div>
+  </div>
+
+  <!-- INSTALL GUIDE -->
+  <div class="install-section">
+    <h3>⚡ <span class="en">Quick Setup Guide</span><span class="bn">দ্রুত সেটআপ গাইড</span></h3>
+    <div class="install-grid">
+      <div class="install-card">
+        <h4 class="en">📲 Step 1 — Install Termux</h4>
+        <h4 class="bn">📲 ধাপ ১ — Termux ইন্সটল</h4>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px;font-family:&#39;Noto Sans Bengali&#39;,sans-serif;" class="en">Download from F-Droid (recommended, not Play Store)</p>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px;font-family:&#39;Noto Sans Bengali&#39;,sans-serif;" class="bn">F-Droid থেকে ডাউনলোড করুন (Play Store নয়)</p>
+      </div>
+      <div class="install-card">
+        <h4 class="en">🔧 Step 2 — First Setup</h4>
+        <h4 class="bn">🔧 ধাপ ২ — প্রথম সেটআপ</h4>
+        <div class="install-cmd">
+          <span>pkg update &amp;&amp; pkg upgrade</span>
+          <button class="copy-btn" onclick="copyCmd(this, &#39;pkg update &amp;&amp; pkg upgrade&#39;)">COPY</button>
+        </div>
+        <div class="install-cmd">
+          <span>termux-setup-storage</span>
+          <button class="copy-btn" onclick="copyCmd(this, &#39;termux-setup-storage&#39;)">COPY</button>
+        </div>
+      </div>
+      <div class="install-card">
+        <h4 class="en">🔑 Step 3 — Essential Tools</h4>
+        <h4 class="bn">🔑 ধাপ ৩ — দরকারি টুলস</h4>
+        <div class="install-cmd">
+          <span>pkg install git python nmap</span>
+          <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install git python nmap&#39;)">COPY</button>
+        </div>
+        <div class="install-cmd">
+          <span>pkg install curl wget openssh</span>
+          <button class="copy-btn" onclick="copyCmd(this, &#39;pkg install curl wget openssh&#39;)">COPY</button>
+        </div>
+      </div>
+      <div class="install-card">
+        <h4 class="en">⚠️ Legal Disclaimer</h4>
+        <h4 class="bn">⚠️ আইনি দাবিত্যাগ</h4>
+        <p style="font-size:12px;color:#ff8800;margin:0;font-family:&#39;Noto Sans Bengali&#39;,sans-serif;" class="en">Use these tools only on systems you own or have explicit permission to test. Unauthorized hacking is illegal.</p>
+        <p style="font-size:12px;color:#ff8800;margin:0;font-family:&#39;Noto Sans Bengali&#39;,sans-serif;" class="bn">এই টুলগুলো শুধুমাত্র নিজের বা অনুমোদিত সিস্টেমে ব্যবহার করুন। অননুমোদিত হ্যাকিং বেআইনি।</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Built for <span>Termux</span> hackers • <span class="en">Ethical use only</span><span class="bn">শুধুমাত্র নৈতিক ব্যবহারের জন্য</span> • <span>2025</span></p>
+</footer>
+
+<div class="notif" id="notif">✓ Copied to clipboard!</div>
+
+<script>
+// MATRIX RAIN
+const canvas = document.getElementById('matrix-bg');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@!%^&*()_+-=[]{}|;:,.<>?/\\~`';
+const fontSize = 14;
+const columns = Math.floor(canvas.width / fontSize);
+const drops = Array(columns).fill(1);
+function matrixDraw() {
+  ctx.fillStyle = 'rgba(10,15,10,0.04)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#00ff41';
+  ctx.font = fontSize + 'px Share Tech Mono, monospace';
+  for (let i = 0; i < drops.length; i++) {
+    const text = chars[Math.floor(Math.random() * chars.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(matrixDraw, 50);
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// LANGUAGE TOGGLE
+let currentLang = 'en';
+function setLang(lang) {
+  currentLang = lang;
+  document.body.className = 'lang-' + lang;
+  document.getElementById('btn-en').className = 'lang-btn' + (lang === 'en' ? ' active' : '');
+  document.getElementById('btn-bn').className = 'lang-btn' + (lang === 'bn' ? ' active' : '');
+  const inp = document.getElementById('search-input');
+  inp.placeholder = lang === 'en' ? 'Search tools & commands...' : 'টুলস ও কমান্ড খুঁজুন...';
+}
+
+// COPY
+function copyCmd(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    const notif = document.getElementById('notif');
+    notif.classList.add('show');
+    setTimeout(() => { notif.classList.remove('show'); }, 2000);
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+// FILTER CATEGORY
+let activeCat = 'all';
+function filterCat(cat, el) {
+  activeCat = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+// SEARCH
+function filterTools() {
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const cards = document.querySelectorAll('.tool-card');
+  let visible = 0;
+  cards.forEach(card => {
+    const cats = card.dataset.cat || '';
+    const name = card.dataset.name || '';
+    const catMatch = activeCat === 'all' || cats.includes(activeCat);
+    const searchMatch = !q || name.includes(q) || card.textContent.toLowerCase().includes(q);
+    if (catMatch && searchMatch) {
+      card.classList.remove('hidden');
+      visible++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  document.getElementById('count-label').textContent = visible + ' tools';
+  const noRes = document.getElementById('no-results');
+  noRes.classList.toggle('show', visible === 0);
+}
+</script>
+
+
+</body></html>
